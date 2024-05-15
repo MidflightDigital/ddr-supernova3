@@ -1,6 +1,10 @@
-return Def.ActorFrame{
-	Def.Quad{
-		InitCommand=cmd(FullScreen;diffuse,color("0,0,0,1"));
-		OnCommand=cmd(diffusealpha,1;linear,0.2;diffusealpha,0);
+local t = Def.ActorFrame{};
+
+t[#t+1] = Def.ActorFrame{
+	LoadActor(THEME:GetPathS("","_swoosh.mp3"))..{
+		OnCommand=cmd(queuecommand,"Play");
+		PlayCommand=cmd(play)
 	};
-}
+};
+
+return t;

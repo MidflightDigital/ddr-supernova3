@@ -9,7 +9,6 @@ function ShowBeatBars()
 	--Working with no code changes. As it stands it probably takes 1 ms or so
 	--to run and so can be left alone. -tertu
 	if GAMESTATE then
-		print("ShowBeatBars: called while Gamestate existed")
 		if GAMESTATE:IsDemonstration() then
 			--show guidelines in demo mode about 1/20th of the time
 			return math.random() > 0.95

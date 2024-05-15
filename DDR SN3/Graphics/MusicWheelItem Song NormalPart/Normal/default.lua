@@ -12,9 +12,15 @@ local group_colors = {
 local t = Def.ActorFrame {
 	LoadActor("Backing");
 --new song
-	LoadActor("../../ScreenSelectMusic NewSong")..{
+Def.Sprite{
+	Texture="new 2x1 (doubleres).png";
 		InitCommand=cmd(x,-138;y,-25;finishtweening;draworder,1;visible,SCREENMAN:GetTopScreen() ~= "ScreenNetRoom");
-		OnCommand=cmd(diffusealpha,0;sleep,1;diffusealpha,1);
+		OnCommand=function(self)
+			self:diffusealpha(0):sleep(1):diffusealpha(1)
+			if ThemePrefs.Get("LightMode") == true then
+				self:pause()
+			end;
+		end;
 		SetCommand=function(self,param)
 			if param.Song then
 				if PROFILEMAN:IsSongNew(param.Song) then
@@ -31,16 +37,17 @@ local t = Def.ActorFrame {
 t[#t+1] = Def.ActorFrame{
 	--Title/Subtitle
 	Def.BitmapText{
-		Font="_russell square 16px";
-		InitCommand=cmd(halign,0;x,-140;maxwidth,300/0.8;wrapwidthpixels,2^24);
+		Font="_itc avant garde gothic lt Bold 16px";
+		InitCommand=cmd(halign,0;x,-140;maxwidth,250/0.8;wrapwidthpixels,2^24);
 		SetMessageCommand=function(self, param)
 			local Song = param.Song;
 			local Course = param.Course;
 			if Song then
-				self:y(-6.4):zoom(0.64)
+				self:y(-6.4):zoom(0.75)
 				self:settext(Song:GetDisplayFullTitle());
-				local color_grp= group_colors[Song:GetGroupName()] or "FFFFFF"
-				self:diffuse(color(color_grp));
+				--local color_grp= group_colors[Song:GetGroupName()] or "FFFFFF"
+				--self:diffuse(color(color_grp));
+				self:diffuse(SongAttributes.GetMenuColor(Song))
 			elseif Course then
 				self:settext(Course:GetDisplayFullTitle());
 			end
@@ -48,8 +55,8 @@ t[#t+1] = Def.ActorFrame{
 	};
 	--Artist
 	Def.BitmapText{
-		Font="_russell square 16px";
-		InitCommand=cmd(halign,0;xy,-140,7;maxwidth,300/0.6;zoom,0.48;wrapwidthpixels,2^24);
+		Font="_itc avant garde gothic lt Bold 16px";
+		InitCommand=cmd(halign,0;xy,-140,7;maxwidth,300/0.6;zoom,0.6;wrapwidthpixels,2^24);
 		CurrentSongChangedMessageCommand=cmd(queuecommand,"Set");
 		CurrentCourseChangedMessageCommand=cmd(queuecommand,"Set");
 		ChangedLanguageDisplayMessageCommand=cmd(queuecommand,"Set");
@@ -59,8 +66,9 @@ t[#t+1] = Def.ActorFrame{
 			if Song then
 				self:visible(true);
 				self:settext(Song:GetDisplayArtist());
-				local color_grp= group_colors[Song:GetGroupName()] or "FFFFFF"
-				self:diffuse(color(color_grp));
+				--local color_grp= group_colors[Song:GetGroupName()] or "FFFFFF"
+				--self:diffuse(color(color_grp));
+				self:diffuse(SongAttributes.GetMenuColor(Song))
 			end
 		end;
 	};

@@ -39,3 +39,47 @@ function UnlockSomeStuffMaybe(text)
 	
 	end
 end
+
+Unlock = {}
+
+--4000, 9000, 15000, 22000, 30000...
+local function cost_tiers(tier)
+	return 500*(tier^2+7*tier)
+end
+
+local function unlock_entries()
+	local limit = UNLOCKMAN:GetNumUnlocks()
+	local current = 0
+	return function()
+		if current < limit then
+			current = current + 1
+			return UNLOCKMAN:GetUnlockEntry(current-1)
+		end
+		return nil
+	end
+end
+
+function UnlockEntry:GetCost()
+	local code = tonumber(self:GetCode())
+	if not code then return cost_tiers(1) end
+	local tier = (code%10)+1
+	return cost_tiers(tier)
+end
+
+do
+	local function unlocks_compare(a, b)
+		if a.cost ~= b.cost then return a.cost < b.cost end
+		return a.song:GetTranslitFullTitle() < b.song:GetTranslitFullTitle()
+	end
+	function Unlock.GetSongs()
+		local output = {}
+		for entry in unlock_entries() do
+			local song = entry:GetSong()
+			if song then
+				local cost = entry:GetCost()
+				output[#output+1] = {song = song, cost = cost, entry = entry}
+			end
+		end
+		table.sort(output, unlocks_compare)
+	end
+end

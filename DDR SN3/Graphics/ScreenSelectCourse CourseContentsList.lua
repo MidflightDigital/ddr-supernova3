@@ -38,7 +38,7 @@ return Def.CourseContentsList {
 					else
 						-- set real
 						self:SetFromSong(param.Song)
-						self:diffuse(SONGMAN:GetSongColor(param.Song))
+						self:diffuse(SongAttributes.GetMenuColor(param.Song))
 					end
 				end;
 			};

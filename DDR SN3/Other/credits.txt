@@ -1,0 +1,47 @@
+!lines that start with ! are comments and are treated as if they didn't exist at all
+!One blank (so comments don't count) line starts a new section. The first line in the section is treated as the header.
+!A sequence of blank lines is treated identically to one blank line.
+!If there is an equals sign at any point in a line except the beginning, whatever is after it becomes a name variable equal to what comes before it.
+!If a line starts with an equals sign, it is replaced with the contents of the name variable. It is an error to use a name variable that hasn't been defined.
+!Overwriting name variables is an error.
+!The predefined name variable "BLANK" can be used to insert a blank line in the middle of a section.
+!Name variables are case sensitive.
+Project Managers
+HypnoticMarten77=marten
+Dreamland200=dream
+
+Graphics Team
+Inorizushi=inori
+=marten
+SilverDragon754
+
+Stepping Team
+=dream
+=marten
+CuzcoBlocko
+darkanine=dark
+Dancefreak
+JunkoXXX
+Nezemarth
+Silverhawke
+Tartachus
+VocaloidFandom
+Kowalski
+Quick Man=quick
+
+Song Team
+=quick
+DJ Vortivask
+Oni-91
+=dark
+
+Theming Team
+=inori
+tertu
+
+Special Thanks
+Holidia
+KENp
+Takuya
+The StepMania 5 Development Team
+Strider

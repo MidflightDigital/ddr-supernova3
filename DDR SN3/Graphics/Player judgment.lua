@@ -66,6 +66,15 @@ local t = Def.ActorFrame {
 		if param.Player ~= player then return end;
 		if param.HoldNoteScore then return end;
 
+		if starterMode and ScoringInfo then
+			if not ScoringInfo.lates then
+				ScoringInfo.lates = {}
+			end
+			if not ScoringInfo.lates[param.Player] then
+				ScoringInfo.lates[param.Player] = 0
+			end
+		end
+		
 		local iNumStates = c.Judgment:GetNumStates();
 		local iFrame = activeFrames[param.TapNoteScore];
 		if not iFrame then return end
@@ -75,6 +84,7 @@ local t = Def.ActorFrame {
 		
 		if starterMode and (iFrame == 1 and late) then
 			iFrame = 2;
+			ScoringInfo.lates[param.Player] = ScoringInfo.lates[param.Player]+1
 		end;
 		
 		self:playcommand("Reset");

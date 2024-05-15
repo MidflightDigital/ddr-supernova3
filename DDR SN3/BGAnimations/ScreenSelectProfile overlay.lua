@@ -24,7 +24,7 @@ end
 --�d�����e����---------------------------
 function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 	local t = Def.ActorFrame {
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBG01") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","CardBG01") ) .. {
 			InitCommand=function(self)
 				if Player==PLAYER_2 then
 					self:zoomx(-1);
@@ -40,7 +40,7 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 				end
 			end;
 		};
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBG02") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","CardBG02") ) .. {
 			InitCommand=function(self)
         if Player==PLAYER_2 then
           self:x(3);
@@ -57,7 +57,7 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 			end;
 		};
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBG03") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","CardBG03") ) .. {
 			InitCommand=function(self)
 				if Player==PLAYER_2 then
 					self:zoomx(-1);
@@ -73,7 +73,7 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 				end
 			end;
 		};
-    LoadActor( THEME:GetPathG("ScreenSelectProfile","CardBG04") ) .. {
+    LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","CardBG04") ) .. {
 			InitCommand=function(self)
 				if Player==PLAYER_2 then
 					self:x(3);
@@ -104,12 +104,12 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
 				self:settext("PLAYER:2");
 				self:x(-7);
 			end
-			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.40;zoomx,0.80))(self);
+			(cmd(sleep,0.6;diffusealpha,1;zoomy,0.40;zoomx,0.80))(self);
 		end;
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","LvWord") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","LvWord") ) .. {
       InitCommand=function(self)
         if Player==PLAYER_2 then
           self:x(23);
@@ -118,11 +118,11 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
         end;
 				(cmd(shadowlength,0;zoom,0;y,46;diffuse,cColor2))(self);
 			end;
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.5;);
+			OnCommand=cmd(sleep,0.6;zoom,0.5;);
 			OffCommand=cmd(linear,0.02;zoom,0.100;diffusealpha,0);
 		};
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","DancerNameWord") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","DancerNameWord") ) .. {
       InitCommand=function(self)
         if Player==PLAYER_2 then
           self:x(-20);
@@ -131,10 +131,10 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
         end;
 				(cmd(shadowlength,0;zoom,0;y,-82.5;diffuse,cColor2))(self);
 			end;
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.4;);
+			OnCommand=cmd(sleep,0.6;zoom,0.4;);
 			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
 		};
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","RankWord") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","RankWord") ) .. {
       InitCommand=function(self)
         if Player==PLAYER_2 then
           self:x(-35);
@@ -143,7 +143,7 @@ function LoadCard(cColor,cColor2,Player,IsJoinFrame)
         end;
 				(cmd(shadowlength,0;zoom,0;y,-40;diffuse,cColor2))(self);
       end;
-			OnCommand=cmd(sleep,0.3;linear,0.3;zoom,0.4;);
+			OnCommand=cmd(sleep,0.6;zoom,0.4;);
 			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
 		};
 	};
@@ -242,7 +242,7 @@ function LoadPlayerStuff(Player)
 		Name = 'JoinFrame';
 		LoadCard(Color('Outline'),color('0,0,0,0'),Player,true);
 
-		LoadActor( THEME:GetPathG("ScreenSelectProfile","Start") ) .. {
+		LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","Start") ) .. {
 			InitCommand=cmd(zoomy,0;diffuseshift;effectcolor1,Color('White');effectcolor2,color("#A5A6A5"));
 			OnCommand=cmd(zoomy,0;zoomx,0;sleep,0.5;linear,0.1;zoomx,0.5;zoomy,0.5);
 			OffCommand=cmd(sleep,0.5;linear,0.1;zoomy,0;diffusealpha,0);
@@ -265,7 +265,7 @@ function LoadPlayerStuff(Player)
         end;
 				(cmd(zoom,0.4;y,-2.5))(self);
       end;
-			OnCommand=cmd(diffusealpha,0;sleep,0.9;linear,0.2;diffusealpha,1);
+			OnCommand=cmd(diffusealpha,0;sleep,0.6;linear,0.2;diffusealpha,1);
 			OffCommand=cmd(linear,0.01;zoom,0;diffusealpha,0);
 		};
 	};
@@ -296,7 +296,7 @@ function LoadPlayerStuff(Player)
       end;
       (cmd(y,-71;zoom,0.6;shadowlength,1;diffuse,color("1,1,1,0");strokecolor,Color("Outline");maxwidth,400))(self);
     end;
-		OnCommand=cmd(sleep,0.8;linear,0.5;diffusealpha,1);
+		OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1);
 		OffCommand=cmd(stoptweening;linear,0.01;zoomy,0;diffusealpha,0);
 	};
 
@@ -308,9 +308,9 @@ function LoadPlayerStuff(Player)
       else
         self:x(55)
       end;
-      (cmd(valign,1;halign,1;y,50;zoom,0;strokecolor,color("#000000");maxwidth,50))(self);
+      (cmd(diffusealpha,0;valign,1;halign,1;y,50;zoom,0.3;strokecolor,color("#000000");maxwidth,50))(self);
     end;
-		OnCommand=cmd(sleep,0.7;linear,0.05;diffusealpha,1;zoom,0.3);
+		OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
@@ -324,7 +324,7 @@ function LoadPlayerStuff(Player)
       end;
       (cmd(y,-56;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,0.1,1");strokecolor,Color("Outline");maxwidth,150))(self);
     end;
-		OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.3;zoomx,0.4;);
+		OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoomy,0.3;zoomx,0.4;);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
@@ -334,16 +334,14 @@ function LoadPlayerStuff(Player)
       if Player==PLAYER_2 then
         self:x(3);
       end;
-      (cmd(y,-54;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,color("1,1,1,1");strokecolor,Color("Outline");maxwidth,350))(self);
+      (cmd(y,-54;zoom,0.5;diffuse,color("1,1,1,0");strokecolor,Color("Outline");maxwidth,350))(self);
     end;
-		OnCommand=function(self)
-			(cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoomy,0.5;zoomx,0.5))(self);
-		end;
+		OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1);
 		OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 	};
 
 
-	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile","LvBar") ) .. {
+	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","LvBar") ) .. {
 			Name = 'selectLvBarBack';
       InitCommand=function(self)
         if Player==PLAYER_2 then
@@ -353,12 +351,12 @@ function LoadPlayerStuff(Player)
         end;
         (cmd(diffusealpha,0;y,46;zoomx,0.5;halign,1))(self);
       end;
-			OnCommand=cmd(sleep,0.3;linear,0.3;diffusealpha,1;diffuse,color("0.4,0.4,0.4,1"));
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;diffuse,color("0.4,0.4,0.4,1"));
 			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
 
 	};
 
-	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile","LvBar") ) .. {
+	t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile","LvBar") ) .. {
 			Name = 'selectLvBar';
       InitCommand=function(self)
         if Player==PLAYER_2 then
@@ -368,7 +366,7 @@ function LoadPlayerStuff(Player)
         end;
         (cmd(diffusealpha,0;y,46;zoomx,0.5;halign,1))(self);
       end;
-			OnCommand=cmd(sleep,0.3;linear,0.3;diffusealpha,1;);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1);
 			OffCommand=cmd(stoptweening;linear,0.02;zoom,0.100;diffusealpha,0);
 
 		};
@@ -379,80 +377,80 @@ function LoadPlayerStuff(Player)
 	};
 	------MyGrooveRadar
 	if (Player == PLAYER_1) then
-		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_1,'single')..{
+		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_1,'single')..{
 			Name = "GVRD1S";
       InitCommand=cmd(x,0;y,5;zoom,0.56;diffusealpha,0;diffuse,PlayerColor(PLAYER_1));
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1);
 			OffCommand=cmd(linear,0.05;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD1Value_S1';
-			InitCommand=cmd(horizalign,right;x,20+8.5;y,-25;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			InitCommand=cmd(horizalign,right;x,20+8.5;y,-25;zoom,0;diffuse,color("1,1,1,0");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD1Value_S2';
-			InitCommand=cmd(horizalign,right;x,-56+8.5;y,-6;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			InitCommand=cmd(horizalign,right;x,-56+8.5;y,-6;zoom,0;diffuse,color("1,1,1,0");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD1Value_S3';
-			InitCommand=cmd(horizalign,right;x,-50+8.5;y,32;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			InitCommand=cmd(horizalign,right;x,-50+8.5;y,32;zoom,0;diffuse,color("1,1,1,0");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD1Value_S4';
-			InitCommand=cmd(horizalign,right;x,50+8.5;y,32;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			InitCommand=cmd(horizalign,right;x,54+8.5;y,32;zoom,0;diffuse,color("1,1,1,0");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD1Value_S5';
-			InitCommand=cmd(horizalign,right;x,50+8.5;y,-6;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			InitCommand=cmd(horizalign,right;x,50+8.5;y,-6;zoom,0;diffuse,color("1,1,1,0");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 
 
 
 	else
-		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_2,'single')..{
+		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile/ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_2,'single')..{
 			Name = "GVRD2S";
 			InitCommand=cmd(x,3;y,5;zoom,0.56;diffusealpha,0;diffuse,PlayerColor(PLAYER_2));
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;);
 			OffCommand=cmd(linear,0.05;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD2Value_S1';
 			InitCommand=cmd(horizalign,right;x,23+8.5;y,-25;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD2Value_S2';
 			InitCommand=cmd(horizalign,right;x,-53+8.5;y,-6;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD2Value_S3';
 			InitCommand=cmd(horizalign,right;x,-47+8.5;y,32;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD2Value_S4';
 			InitCommand=cmd(horizalign,right;x,53+8.5;y,32;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 		t[#t+1]=LoadFont("_russell square 16px") .. {
 			Name = 'GVRD2Value_S5';
 			InitCommand=cmd(horizalign,right;x,53+8.5;y,-6;zoom,0;diffuse,color("1,1,1,1");diffusebottomedge,PlayerColor(PLAYER_1);strokecolor,Color("Outline");maxwidth,220);
-			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;zoom,0.35);
+			OnCommand=cmd(sleep,0.6;linear,0.2;diffusealpha,1;zoom,0.35);
 			OffCommand=cmd(stoptweening;linear,0.1;zoomy,0;diffusealpha,0);
 		};
 	end;

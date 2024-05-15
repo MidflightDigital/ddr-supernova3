@@ -1,32 +1,88 @@
 return Def.ActorFrame{
 	Def.ActorFrame{
-		InitCommand=cmd(player,PLAYER_1;x,-240;y,77.5);
+		InitCommand=cmd(player,PLAYER_1;x,-220;y,130;zoom,1.5);
 		LoadActor("1P_OK")..{
+			OnCommand=cmd(zoomy,0);
+			OffCommand=cmd(linear,0.1;zoomy,1;sleep,0.5;linear,0.1;zoomy,0);
+			ExitSelectedP1Command=function(self)
+				setenv("PlayerOptionExitP1",true);
+				(cmd(stoptweening;linear,0.1;zoomy,1;))(self)
+			end;
+			ExitUnselectedP1Command=function(self)
+				setenv("PlayerOptionExitP1",false);
+				(cmd(stoptweening;linear,0.1;zoomy,0;))(self)
+			end;
+		};
+		LoadActor("1P_WAIT")..{
 			OnCommand=cmd(zoomy,0);
 			OffCommand=cmd(linear,0.1;zoomy,1;sleep,0.5;linear,0.1;zoomy,0);
 		};
 		LoadActor("1P_LEFT")..{
 			OnCommand=cmd(diffusealpha,0;);
 			OffCommand=cmd(diffusealpha,1;linear,0.1;addx,-10;linear,0.1;addx,10;sleep,0.2;zoomy,0);
+			ExitSelectedP1Command=function(self)
+				setenv("PlayerOptionExitP1",true);
+				(cmd(stoptweening;diffusealpha,1;))(self)
+			end;
+			ExitUnselectedP1Command=function(self)
+				setenv("PlayerOptionExitP1",false);
+				(cmd(stoptweening;diffusealpha,0;))(self)
+			end;
 		};
 		LoadActor("1P_RIGHT")..{
 			OnCommand=cmd(diffusealpha,0;);
 			OffCommand=cmd(diffusealpha,1;linear,0.1;addx,10;linear,0.1;addx,-10;sleep,0.2;zoomy,0);
+			ExitSelectedP1Command=function(self)
+				setenv("PlayerOptionExitP1",true);
+				(cmd(stoptweening;diffusealpha,1;))(self)
+			end;
+			ExitUnselectedP1Command=function(self)
+				setenv("PlayerOptionExitP1",false);
+				(cmd(stoptweening;diffusealpha,0;))(self)
+			end;
 		};
 	};
 	Def.ActorFrame{
-		InitCommand=cmd(player,PLAYER_2;x,240;y,77.5);
+		InitCommand=cmd(player,PLAYER_2;x,220;y,130;zoom,1.5);
 		LoadActor("2P_OK")..{
+			OnCommand=cmd(zoomy,0);
+			OffCommand=cmd(linear,0.1;zoomy,1;sleep,0.5;linear,0.1;zoomy,0);
+			ExitSelectedP2Command=function(self)
+				setenv("PlayerOptionExitP2",true);
+				(cmd(stoptweening;linear,0.1;zoomy,1;))(self)
+			end;
+			ExitUnselectedP2Command=function(self)
+				setenv("PlayerOptionExitP2",false);
+				(cmd(stoptweening;linear,0.1;zoomy,0;))(self)
+			end;
+		};
+		LoadActor("2P_WAIT")..{
 			OnCommand=cmd(zoomy,0);
 			OffCommand=cmd(linear,0.1;zoomy,1;sleep,0.5;linear,0.1;zoomy,0);
 		};
 		LoadActor("2P_LEFT")..{
 			OnCommand=cmd(diffusealpha,0;);
 			OffCommand=cmd(diffusealpha,1;linear,0.1;addx,-10;linear,0.1;addx,10;sleep,0.2;zoomy,0);
+			ExitSelectedP2Command=function(self)
+				setenv("PlayerOptionExitP2",true);
+				(cmd(stoptweening;diffusealpha,1;))(self)
+			end;
+			ExitUnselectedP2Command=function(self)
+				setenv("PlayerOptionExitP2",false);
+				(cmd(stoptweening;diffusealpha,0;))(self)
+			end;
 		};
 		LoadActor("2P_RIGHT")..{
 			OnCommand=cmd(diffusealpha,0;);
 			OffCommand=cmd(diffusealpha,1;linear,0.1;addx,10;linear,0.1;addx,-10;sleep,0.2;zoomy,0);
+			ExitSelectedP2Command=function(self)
+				setenv("PlayerOptionExitP2",true);
+				(cmd(stoptweening;diffusealpha,1;))(self)
+			end;
+			ExitUnselectedP2Command=function(self)
+				setenv("PlayerOptionExitP2",false);
+				(cmd(stoptweening;diffusealpha,0;))(self)
+			end;
 		};
 	};
 };

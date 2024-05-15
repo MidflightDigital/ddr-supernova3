@@ -35,12 +35,12 @@ if GAMESTATE:GetPlayMode() == "PlayMode_Rave" then
 end
 
 local xPosPlayer = {
-    P1 = -(SCREEN_WIDTH/6.7), 
+    P1 = -(SCREEN_WIDTH/6.7),
     P2 = (SCREEN_WIDTH/6.7)
 }
 
 local xPosPlayerRave = {
-	P1 = -(640/6.7), 
+	P1 = -(640/6.7),
     P2 = (640/6.7)
 };
 
@@ -84,7 +84,7 @@ for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 	};
 end;
 
-t[#t+1] = LoadActor("../Badges/P1")..{
+t[#t+1] = LoadActor("../_shared/Badges/LifeBar/P1")..{
 	InitCommand=function(self)
 		if GAMESTATE:GetPlayMode() == "PlayMode_Rave" then
 				self:x(-(640/2.08))
@@ -101,7 +101,7 @@ t[#t+1] = LoadActor("../Badges/P1")..{
 	end;
 };
 
-t[#t+1] = LoadActor("../Badges/P2")..{
+t[#t+1] = LoadActor("../_shared/Badges/LifeBar/P2")..{
 	InitCommand=function(self)
 		if GAMESTATE:GetPlayMode() == "PlayMode_Rave" then
 				self:x((640/2.08))
@@ -176,6 +176,6 @@ t[#t+1] = LoadActor("danger 2x1")..{
 			end;
 		end;
 };
-	
+
 
 return t

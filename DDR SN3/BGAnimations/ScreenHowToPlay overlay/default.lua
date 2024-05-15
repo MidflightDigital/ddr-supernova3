@@ -29,7 +29,7 @@ local t = Def.ActorFrame{
 	};
 	LoadActor("howtoplay small")..{
 		Name="HowToPlaySmall";
-		InitCommand=cmd(x,SCREEN_CENTER_X+130;y,SCREEN_TOP+25;);
+		InitCommand=cmd(x,WideScale(SCREEN_CENTER_X+130,SCREEN_CENTER_X+200);y,SCREEN_TOP+25;);
 		OnCommand=cmd(addy,-50;sleep,0.3;sleep,1.8;linear,0.2;addy,50);
 	};
 	LoadActor("feet")..{
@@ -38,7 +38,7 @@ local t = Def.ActorFrame{
 	};
 	-- let the messages begin
 	Def.ActorFrame {
-		InitCommand=cmd(x,SCREEN_CENTER_X-146;y,SCREEN_CENTER_Y+37);
+		InitCommand=cmd(x,WideScale(SCREEN_CENTER_X-146,SCREEN_CENTER_X-240);y,SCREEN_CENTER_Y+37);
 		LoadActor("text_up")..{
 			OnCommand=cmd(zoomy,0;sleep,10;decelerate,0.3;zoomy,1;sleep,3.3;zoomy,0);
 		};
@@ -46,11 +46,11 @@ local t = Def.ActorFrame{
 			OnCommand=cmd(zoomy,0;sleep,16.4;decelerate,0.3;zoomy,1;sleep,3.3;zoomy,0);
 		};
 		--Freeze 1
-		LoadActor("text_jump")..{
+		LoadActor("text_freeze")..{
 			OnCommand=cmd(zoomy,0;sleep,22.6;decelerate,0.3;zoomy,1;sleep,2;zoomy,0);
 		};
 		--Freeze 2
-		LoadActor("text_jump")..{
+		LoadActor("text_missfreeze")..{
 			OnCommand=cmd(zoomy,0;sleep,27.4;decelerate,0.3;zoomy,1;sleep,2;zoomy,0);
 		};
 		LoadActor("text_gameover")..{
@@ -72,7 +72,7 @@ t[#t+1] = LoadActor(THEME:GetPathG("ScreenGameplay","LifeFrame/"..line))..{
 	end,
 };
 
-t[#t+1] = LoadActor(THEME:GetPathG("","Badges/P1"))..{
+t[#t+1] = LoadActor(THEME:GetPathG("","_shared/Badges/LifeBar/P1"))..{
 	InitCommand=function(self)
 		self:x(SCREEN_LEFT+10):y(SCREEN_TOP+25)
 	end;

@@ -181,3 +181,12 @@ end
 function color_grp(params)
 	return group_colors[params.Song:GetGroupName()] or color("#FFFFFF")
 end;
+
+--this is for replicating the leading zeros functionality of RollingNumbers
+--without RollingNumbers
+function GetLeadingAttribute(number, baselength, color)
+	local len = baselength - #(tostring(math.floor(number)))
+	if len > 0 then
+		return {Length = len, Diffuse = color}
+	end
+end

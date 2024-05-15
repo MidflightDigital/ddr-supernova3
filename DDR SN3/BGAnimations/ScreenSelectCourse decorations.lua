@@ -5,15 +5,15 @@ local t = LoadFallbackB();
 --QUAD THE COURSE LIST BG BECAUSE LOL TOO LAZY TO PHOTOSHOP
 --Green stroke because fuck it.
 t[#t+1] = Def.Quad{
-  InitCommand=cmd(halign,0;valign,0;setsize,289,300;x,SCREEN_LEFT;y,SCREEN_CENTER_Y-70;diffuse,color("#06ff00");diffusebottomedge,color("0,0,0,1"));
-  OnCommand=cmd(addx,-400;sleep,0.264;decelerate,0.52;addx,400;sleep,0.1;linear,0);
-  OffCommand=cmd(sleep,0.033;accelerate,0.33;addx,-400);
+  InitCommand=cmd(valign,0;setsize,289,300;x,BannerFramePosX()-8;y,SCREEN_CENTER_Y-64;diffuse,color("#06ff00");diffusebottomedge,color("0,0,0,1"));
+  OnCommand=cmd(addx,-500;sleep,0.264;decelerate,0.52;addx,500;sleep,0.1;linear,0);
+  OffCommand=cmd(sleep,0.033;accelerate,0.33;addx,-500);
 };
 --The actual black insert.
 t[#t+1] = Def.Quad{
-  InitCommand=cmd(halign,0;valign,0;setsize,288,300;x,SCREEN_LEFT;y,SCREEN_CENTER_Y-70;diffuse,color("0,0,0,1"));
-  OnCommand=cmd(addx,-400;sleep,0.264;decelerate,0.52;addx,400;sleep,0.1;linear,0);
-  OffCommand=cmd(sleep,0.033;accelerate,0.33;addx,-400);
+  InitCommand=cmd(valign,0;setsize,288,300;x,BannerFramePosX()-8;y,SCREEN_CENTER_Y-64;diffuse,color("0,0,0,1"));
+  OnCommand=cmd(addx,-500;sleep,0.264;decelerate,0.52;addx,500;sleep,0.1;linear,0);
+  OffCommand=cmd(sleep,0.033;accelerate,0.33;addx,-500);
 };
 --Gotta love quads man. -Inorizushi
 

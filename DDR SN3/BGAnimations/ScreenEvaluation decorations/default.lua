@@ -3,74 +3,61 @@ local t = LoadFallbackB();
 t[#t+1] = StandardDecorationFromFileOptional("StyleIcon","StyleIcon");
 t[#t+1] = StandardDecorationFromFile("StageDisplay","StageDisplay");
 
-if not GAMESTATE:IsCourseMode() then
-t[#t+1] = Def.Quad{
-	InitCommand=cmd(setsize,SCREEN_WIDTH,48;diffuse,color("0,0,0,1");fadeleft,0.75;faderight,0.75;x,SCREEN_CENTER_X;y,SCREEN_BOTTOM-80;zoomx,0;zoomy,1;diffusealpha,0.8;sleep,0.000;);
-	OnCommand=cmd(sleep,0.333;decelerate,0.133;zoomy,1;diffusealpha,1;accelerate,0.033;zoomx,0.5;decelerate,0.033;zoomx,1);
-	OffCommand=cmd(sleep,0.0000;sleep,0.333;decelerate,0.066;zoomx,0;diffusealpha,0);
+t[#t+1] = Def.ActorFrame{
+	LoadActor( THEME:GetPathB("","optionicon_P1") ) .. {
+		InitCommand=cmd(halign,0;player,PLAYER_1;x,SCREEN_LEFT+110;y,SCREEN_CENTER_Y;draworder,1);
+		OnCommand=function(self)
+			self:y(SCREEN_CENTER_Y+180):zoomy(0):linear(0.2):zoomy(1)
+		end;
+		OffCommand=cmd(linear,0.2;zoomy,0);
+	};
+	LoadActor( THEME:GetPathB("","optionicon_P2") ) .. {
+		InitCommand=cmd(halign,1;player,PLAYER_2;x,SCREEN_RIGHT-110;y,SCREEN_CENTER_Y;draworder,1);
+		OnCommand=function(self)
+			self:y(SCREEN_CENTER_Y+180):zoomy(0):linear(0.2):zoomy(1)
+		end;
+		OffCommand=cmd(linear,0.2;zoomy,0);
+	};
 };
-t[#t+1] = StandardDecorationFromFileOptional("SongInformation","SongInformation") .. {
-	BeginCommand=function(self)
-		local SongOrCourse;
-		if GAMESTATE:GetCurrentSong() then
-			SongOrCourse = GAMESTATE:GetCurrentSong();
-		elseif GAMESTATE:GetCurrentCourse() then
-			SongOrCourse = GAMESTATE:GetCurrentCourse();
-		else
-			return
-		end
 
-	end;
-	SetCommand=function(self)
-		local c = self:GetChildren();
-		local SongOrCourse;
-		if GAMESTATE:GetCurrentSong() then
-			SongOrCourse = GAMESTATE:GetCurrentSong();
-
-			c.TextTitle:settext( SongOrCourse:GetDisplayMainTitle() or nil );
-			c.TextSubtitle:settext( SongOrCourse:GetDisplaySubTitle() or nil );
-			c.TextArtist:settext( SongOrCourse:GetDisplayArtist() or nil );
-
-			if SongOrCourse:GetDisplaySubTitle() == "" then
-				c.TextTitle:visible(true);
-				c.TextTitle:y(-16.5/2);
-				c.TextSubtitle:visible(false);
-				c.TextSubtitle:y(0);
-				c.TextArtist:visible(true);
-				c.TextArtist:y(18/2);
-			else
-				c.TextTitle:visible(true);
-				c.TextTitle:y(-16.5);
-				c.TextSubtitle:visible(true);
-				c.TextSubtitle:y(0);
-				c.TextArtist:visible(true);
-				c.TextArtist:y(18);
-			end
--- 			self:playcommand("Tick");
-		elseif GAMESTATE:GetCurrentCourse() then
-			SongOrCourse = GAMESTATE:GetCurrentCourse();
-
-			c.TextTitle:settext( SongOrCourse:GetDisplayMainTitle() or nil );
-			c.TextSubtitle:settext( SongOrCourse:GetDisplaySubTitle() or nil );
-			c.TextArtist:settext( SongOrCourse:GetDisplayArtist() or nil );
-
--- 			self:playcommand("Tick");
-		else
-			SongOrCourse = nil;
-
-			c.TextTitle:settext("");
-			c.TextSubtitle:settext("");
-			c.TextArtist:settext("");
-
-			self:playcommand("Hide")
-		end
-	end;
--- 	OnCommand=cmd(playcommand,"Set");
-	CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
-	DisplayLanguageChangedMessageCommand=cmd(playcommand,"Set");
+--Score Area
+if GAMESTATE:IsPlayerEnabled('PlayerNumber_P1') then
+--P1 Score Frame
+t[#t+1]=Def.ActorFrame{
+	OffCommand=cmd(linear,0.2;addx,-SCREEN_WIDTH);
+	LoadActor("diff frame")..{
+		InitCommand=cmd(halign,0;xy,SCREEN_LEFT,SCREEN_BOTTOM-104;);
+	};
+	Def.ActorFrame{
+		Name = "ScoreFrameP1";
+		Def.Quad{
+			InitCommand=cmd(halign,0;xy,SCREEN_LEFT,SCREEN_BOTTOM-85;setsize,WideScale(192,256),24;diffuse,color("#666666"));
+		};
+		Def.Quad{
+			InitCommand=cmd(halign,0;xy,SCREEN_LEFT,SCREEN_BOTTOM-85;setsize,WideScale(190,254),20;diffuse,color("0,0,0,1"));
+		};
+	};
 };
 end;
+
+if GAMESTATE:IsPlayerEnabled('PlayerNumber_P2') then
+t[#t+1]=Def.ActorFrame{
+	OffCommand=cmd(linear,0.2;addx,SCREEN_WIDTH);
+	LoadActor("diff frame")..{
+		InitCommand=cmd(zoomx,-1;halign,0;xy,SCREEN_RIGHT,SCREEN_BOTTOM-104;);
+	};
+	Def.ActorFrame{
+		Name = "ScoreFrameP2";
+		Def.Quad{
+			InitCommand=cmd(halign,1;xy,SCREEN_RIGHT,SCREEN_BOTTOM-85;setsize,WideScale(192,256),24;diffuse,color("#666666"));
+		};
+		Def.Quad{
+			InitCommand=cmd(halign,1;xy,SCREEN_RIGHT,SCREEN_BOTTOM-85;setsize,WideScale(190,254),20;diffuse,color("0,0,0,1"));
+		};
+	};
+};
+end;
+
 -- judge labels
 t[#t+1] = LoadActor("labels")..{
 	InitCommand=cmd(CenterX;y,SCREEN_CENTER_Y+32;zoomy,0);
@@ -130,10 +117,10 @@ t[#t+1] = Def.ActorFrame {
 		OnCommand=cmd(play);
 	};
 };
-t[#t+1] = LoadActor("grade")..{
-	InitCommand=cmd(diffusealpha,1;draworder,100);
-	OffCommand=cmd(sleep,0.2;linear,0.2;diffusealpha,0);
-};
+
+for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
+	t[#t+1] = LoadActor("grade", pn)
+end
 
 local stageXPos = {
 	P1 = -280,
@@ -165,5 +152,30 @@ if GAMESTATE:IsCourseMode() then
 		};
 	end
 end
+
+t[#t+1] = Def.ActorFrame{
+	LoadActor("P1")..{
+		InitCommand=cmd(x,SCREEN_CENTER_X-240;y,SCREEN_CENTER_Y-30);
+		BeginCommand=cmd(playcommand,"Check1");
+		OnCommand=cmd(draworder,9;addx,-SCREEN_WIDTH;sleep,0.2;linear,0.2;addx,SCREEN_WIDTH);
+		OffCommand=cmd(linear,0.2;addx,-SCREEN_WIDTH);
+		Check1Command=function(self,param)
+			if GAMESTATE:IsPlayerEnabled(0) == false then
+				self:visible(false)
+			end
+		end;
+	};
+	LoadActor("P2")..{
+		InitCommand=cmd(x,SCREEN_CENTER_X+240;y,SCREEN_CENTER_Y-30);
+		BeginCommand=cmd(playcommand,"Check2");
+		OnCommand=cmd(draworder,9;addx,SCREEN_WIDTH;sleep,0.2;linear,0.2;addx,-SCREEN_WIDTH);
+		OffCommand=cmd(linear,0.2;addx,SCREEN_WIDTH);
+		Check2Command=function(self,param)
+			if GAMESTATE:IsPlayerEnabled(1) == false then
+				self:visible(false)
+			end
+		end;
+	};
+}
 
 return t

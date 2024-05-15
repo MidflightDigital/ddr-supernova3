@@ -8,11 +8,17 @@ return Def.ActorFrame {
 		LoseFocusCommand=cmd(finishtweening;linear,0.5;diffusealpha,0;);
 		OffCommand=cmd(linear,0.3;cropright,1);
 	};
-	LoadFont("_shared_title") .. {
+	LoadFont("_handelgothic bt 20px") .. {
 		Text=gc:GetText(),
-		InitCommand=cmd(uppercase,true;halign,0;zoomy,0.9;zoomx,1.1;diffusebottomedge,color("#30e823");strokecolor,color("#000000"));
+		InitCommand=function(self)
+			self:uppercase(true):halign(0):zoomy(0.9):zoomx(1):diffusebottomedge(color("#30e823")):strokecolor(color("#000000"))
+			if gc:GetText() == "SPECTRAL MASTER MODE" then
+				self:zoomy(0.8):zoomx(0.9)
+			end;
+		end;
 		GainFocusCommand=function(self) self:finishtweening():diffuse(color("1,1,1,1")):diffusetopedge(color("#a6f5a1")):diffusebottomedge(color("#30e823"))
-            MESSAGEMAN:Broadcast("TitleSelection", {Choice=gc:GetName()}) end,
+    	MESSAGEMAN:Broadcast("TitleSelection", {Choice=gc:GetName()})
+		end,
 		LoseFocusCommand=function(self) self:stopeffect():diffuse(color("0.5,0.5,0.5,1")) end
 	};
 	Def.ActorFrame{

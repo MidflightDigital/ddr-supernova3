@@ -4,12 +4,16 @@ return Def.ActorFrame {
 		OnCommand=cmd(diffusealpha,0;linear,0.5;diffusealpha,0.5);
 		OffCommand=cmd(linear,0.5;diffusealpha,0);
 	};
-	LoadActor( THEME:GetPathG("ScreenWithMenuElements","header/regular/under"))..{
+	LoadActor( THEME:GetPathG("ScreenWithMenuElements","header/regular/new"))..{
 		InitCommand=cmd(x,SCREEN_LEFT;halign,0;y,SCREEN_TOP+38);
 		OffCommand=cmd(diffusealpha,0)
 	};
-	LoadActor( THEME:GetPathG("ScreenWithMenuElements","header/regular/top"))..{
-		InitCommand=cmd(x,SCREEN_LEFT;halign,0;y,SCREEN_TOP+38);
+	LoadActor( THEME:GetPathG("ScreenWithMenuElements","footer/rightbiased"))..{
+		InitCommand=cmd(x,SCREEN_RIGHT;halign,1;y,SCREEN_BOTTOM-26);
+		OffCommand=cmd(diffusealpha,0)
+	};
+	LoadActor(THEME:GetPathG("","_footer/con-sel.lua"))..{
+		InitCommand=cmd(y,SCREEN_BOTTOM-36);
 		OffCommand=cmd(diffusealpha,0)
 	};
 	LoadActor( THEME:GetPathG("ScreenWithMenuElements","header/regular/grid"))..{
@@ -23,11 +27,7 @@ return Def.ActorFrame {
 		OffCommand=cmd(finishtweening;diffusealpha,0);
 	};
 	LoadActor( THEME:GetPathG("ScreenWithMenuElements","header/Options"))..{
-		InitCommand=cmd(x,SCREEN_LEFT+95;halign,0;valign,1;y,SCREEN_TOP+38+5);
-		OffCommand=cmd(diffusealpha,0)
-	};
-	LoadActor( THEME:GetPathG("ScreenWithMenuElements","header/regular/3"))..{
-		InitCommand=cmd(x,SCREEN_LEFT;halign,0;y,SCREEN_TOP+38);
+		InitCommand=cmd(x,SCREEN_LEFT+123;valign,1;y,SCREEN_TOP+38+8;zoom,1.01);
 		OffCommand=cmd(diffusealpha,0)
 	};
 	--p1

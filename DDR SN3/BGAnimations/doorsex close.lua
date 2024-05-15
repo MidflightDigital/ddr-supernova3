@@ -1,4 +1,4 @@
-local t = LoadActor(THEME:GetPathB("","_doors"), "doorex", 0.4, true )
+local t = LoadActor(THEME:GetPathB("","_doors"), "_newer door", 0.4, true )
 
 t[#t+1] = Def.ActorFrame{
 	LoadActor(THEME:GetPathS("","_siren"))..{

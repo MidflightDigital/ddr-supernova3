@@ -1,13 +1,13 @@
 local t = Def.ActorFrame{};
 local screenName = Var "LoadingScreen"
 
-if screenName ~= "ScreenSelectMusicExtra" then
+if screenName == "ScreenSelectMusicRD" then
   t[#t+1] = Def.ActorFrame{
-    LoadActor("Normal");
+    LoadActor("RD");
   };
 else
   t[#t+1] = Def.ActorFrame{
-    LoadActor("Extra");
+    LoadActor("Normal");
   };
 end;
 

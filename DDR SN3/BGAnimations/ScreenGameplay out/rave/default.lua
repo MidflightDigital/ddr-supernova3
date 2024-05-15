@@ -1,16 +1,9 @@
-local t = Def.ActorFrame {
-	LoadActor(("../../cleared"))..{
-		StartTransitioningCommand=cmd(play);
-	};
-	---- DOOR OPEN > CLOSE  CLOSE > OPEN
-	LoadActor(THEME:GetPathB("","Door1"))..{
-		InitCommand=cmd(x,SCREEN_CENTER_X-SCREEN_WIDTH;CenterY;halign,1);
-		OnCommand=cmd(sleep,1.3;linear,0.75;x,SCREEN_CENTER_X+51);
-	};
-	LoadActor(THEME:GetPathB("","Door2"))..{
-		InitCommand=cmd(x,SCREEN_CENTER_X+SCREEN_WIDTH;CenterY;halign,0);
-		OnCommand=cmd(sleep,1.3;linear,0.75;x,SCREEN_CENTER_X-51);
-	};
+local t = LoadActor(THEME:GetPathB("","_doors"), "_newer door", 1.5, true )
+t[#t+1] = LoadActor(("../cheer"))..{
+	StartTransitioningCommand=cmd(play);
+};
+t[#t+1] = LoadActor(("../../cleared"))..{
+	StartTransitioningCommand=cmd(play);
 };
 
 t[#t+1] = Def.ActorFrame{

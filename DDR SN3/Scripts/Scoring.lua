@@ -1,7 +1,13 @@
---This is an implementation of DDR SuperNOVA 2 and beyond scoring as described
---by Aaron Chmielowiec at http://aaronin.jp/ddrssystem.html#ss9.
+--[[Scoring.lua
+This includes a few modules that all have to do with scoring and grading.
+SN2Scoring and OldScoring are independent modules.
+SN2Grading partially depends on SN2Scoring.
+All information used is from http://aaronin.jp/ddrssystem.html. The
+information used for SN2 was written by Aaron C.
+]]
 
---To use it, you can call PrepareScoringInfo at the start of each stage or course.
+--SN2Scoring
+--Implements the scoring system used by DDR SN2-2014.
 
 --Shared functions/data
 
@@ -57,6 +63,25 @@ local maxQuasiMultipliers =
     TapNoteScore_Miss = 1
 }
 
+--Given a thing which has functions hnsFuncName and tnsFuncName that take one
+--argument and return the number of TNSes or HNSes there are in that thing,
+--pack that information into something useful.
+--This is a pretty bad function description, so just see how it's used.
+local function GetScoreDataFromThing(thing, tnsFuncName, hnsFuncName)
+    local output = {}
+    --how class function lookup works internally in Lua
+    local hnsFunc = thing[hnsFuncName]
+    local tnsFunc = thing[tnsFuncName]
+    for tns, _ in pairs(maxQuasiMultipliers) do
+        output[tns] = tnsFunc(thing, tns)
+    end
+    for _, hns in pairs({'HoldNoteScore_Held', 'HoldNoteScore_LetGo'}) do
+        assert(hnsFunc(thing, hns))
+        output[hns] = hnsFunc(thing, hns)
+    end
+    return output
+end
+
 function SN2Scoring.PrepareScoringInfo(starterRules)
     if GAMESTATE then
         local stageSeed = GAMESTATE:GetStageSeed()
@@ -80,39 +105,61 @@ function SN2Scoring.PrepareScoringInfo(starterRules)
     end
 end
 
+--data format for this function:
+--a table with a count of total holds, rolls, and taps called "Total"
+--all earned TapNoteScores in the class W1-W5 and Miss under their native names
+--all earned HoldNoteScores
+function SN2Scoring.ComputeNormalScoreFromData(data, max, scoringRuleSet)
+    scoringRuleSet = scoringRuleSet or normalScoringRules.normal
+    local objectCount = data.Total
+    local maxScore = 1000000
+    local maxFraction = 0
+    local totalDeductions = 0
+    local tnsMultipliers, hnsMultipliers, deductions
+    if max then
+        tnsMultipliers = maxQuasiMultipliers
+        hnsMultipliers = {HoldNoteScore_Held = 1, HoldNoteScore_LetGo = 1}
+        deductions = {}
+    else
+        tnsMultipliers = scoringRuleSet.multipliers
+        hnsMultipliers = {HoldNoteScore_Held = 1}
+        deductions = scoringRuleSet.deductions
+    end
+    local scoreCount
+    for tns, multiplier in pairs(tnsMultipliers) do
+        scoreCount = data[tns]
+        maxFraction = maxFraction + (scoreCount * multiplier)
+        totalDeductions = totalDeductions + (scoreCount * (deductions[tns] or 0))
+    end
+    for hns, multiplier in pairs(hnsMultipliers) do
+        scoreCount = data[hns]
+        maxFraction = maxFraction + (scoreCount * multiplier)
+    end
+    return ((maxFraction/objectCount) * maxScore) - totalDeductions    
+end
+
+
+function SN2Scoring.GetSN2ScoreFromHighScore(steps, highScore)
+    local scoreData = GetScoreDataFromThing(highScore, "GetTapNoteScore", 
+        "GetHoldNoteScore")
+    local radar = steps:GetRadarValues(pn)
+    scoreData.Total = radar:GetValue('RadarCategory_TapsAndHolds')+
+        radar:GetValue('RadarCategory_Holds')+radar:GetValue('RadarCategory_Rolls')
+    return SN2Scoring.ComputeNormalScoreFromData(scoreData)
+end
+
 --Normal scoring
 
 function SN2Scoring.MakeNormalScoringFunctions(stepsObject,pn,starterRules)
     local package = {}
     local radar = stepsObject:GetRadarValues(pn)
-    local maxScore = starterRules and 100000 or 1000000
     local objectCount = radar:GetValue('RadarCategory_TapsAndHolds')+radar:GetValue('RadarCategory_Holds')+radar:GetValue('RadarCategory_Rolls')
     local scoringRuleSet = starterRules and normalScoringRules.starter or normalScoringRules.normal
 
     local function ComputeScore(pss, max)
-        local maxFraction = 0
-        local totalDeductions = 0
-        local tnsMultipliers, hnsMultipliers, deductions
-        if max then
-            tnsMultipliers = maxQuasiMultipliers
-            hnsMultipliers = {HoldNoteScore_Held = 1, HoldNoteScore_LetGo = 1}
-            deductions = {}
-        else
-            tnsMultipliers = scoringRuleSet.multipliers
-            hnsMultipliers = {HoldNoteScore_Held = 1}
-            deductions = scoringRuleSet.deductions
-        end
-        local scoreCount
-        for tns, multiplier in pairs(tnsMultipliers) do
-            scoreCount = pss:GetTapNoteScores(tns)
-            maxFraction = maxFraction + (scoreCount * multiplier)
-            totalDeductions = totalDeductions + (scoreCount * (deductions[tns] or 0))
-        end
-        for hns, multiplier in pairs(hnsMultipliers) do
-            scoreCount = pss:GetHoldNoteScores(hns)
-            maxFraction = maxFraction + (scoreCount * multiplier)
-        end
-        return ((maxFraction/objectCount) * maxScore) - totalDeductions
+        local computeData = GetScoreDataFromThing(pss, "GetTapNoteScores", "GetHoldNoteScores")
+        computeData.Total = objectCount
+        return SN2Scoring.ComputeNormalScoreFromData(computeData, max, scoringRuleSet)
     end
 
     package.AddTapScore = function() end
@@ -248,6 +295,69 @@ function SN2Scoring.MakeCourseScoringFunctions(trailObject,pn)
     end
 
     return package
+end
+
+--SN2Grading
+--Implements the grading system used by DDR SN2-2014.
+
+SN2Grading = {}
+--Edit is technically the "highest difficulty"
+local grade_table = {
+    Difficulty_Edit = {
+        Grade_Tier01 = 1000000, --AAA+
+        Grade_Tier02 = 990000, --AAA
+        Grade_Tier03 = 950000, --AA
+        Grade_Tier04 = 900000, --A
+        Grade_Tier05 = 800000, --B
+        Grade_Tier06 = 700000, --C
+        Grade_Tier07 = 0 --D
+    },
+    Difficulty_Medium = {
+        Grade_Tier04 = 850000,
+        Grade_Tier05 = 750000,
+        Grade_Tier06 = 600000
+    },
+    Difficulty_Easy = {
+        Grade_Tier04 = 800000,
+        Grade_Tier05 = 700000,
+        Grade_Tier06 = 500000
+    }
+}
+--i'm too lazy to fill this out in full, so this does it for me
+do
+    local rev_diff = Enum.Reverse(Difficulty)
+    local max_diff = rev_diff.Difficulty_Challenge+1
+    local min_diff = rev_diff.Difficulty_Beginner+1
+    --DeepCopy is so that these are all independent
+    local cur_grade_table = grade_table.Difficulty_Edit
+    for idx=max_diff, min_diff, -1 do
+        --inherit changes from the "parent"
+        cur_grade_table = DeepCopy(cur_grade_table)
+        local source_table = grade_table[Difficulty[idx]]
+        if source_table then
+           for k, v in pairs(source_table) do cur_grade_table[k] = v end
+        end
+        grade_table[Difficulty[idx]] = cur_grade_table
+    end
+end
+
+function SN2Grading.ScoreToGrade(score, difficulty)
+    local tiers = grade_table[difficulty]
+    local output = nil
+    local best = 0
+    for grade, min_score in pairs(tiers) do
+        if score >= min_score and min_score >= best then
+            output = grade
+            best = min_score
+        end
+    end
+    return output
+end
+
+--returns score too because what the hell
+function SN2Grading.GetSN2GradeFromHighScore(steps, highScore)
+    local score = SN2Scoring.GetSN2ScoreFromHighScore(steps, highScore)
+    return SN2Grading.ScoreToGrade(score, steps:GetDifficulty()), score
 end
 
 -- (c) 2015-2017 John Walstrom, "Inorizushi"

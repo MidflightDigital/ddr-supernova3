@@ -59,10 +59,9 @@ t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;spin;effectmagnitude,0,0,-4);
 	LoadActor(THEME:GetPathB("","_shared/SN2/line")) .. {
 		InitCommand=cmd(x,-550;zoomto,SCREEN_WIDTH*3,SCREEN_HEIGHT*10;rotationy,-80;customtexturerect,0,0,SCREEN_WIDTH*1.5/48,SCREEN_HEIGHT*1.5/96);
-		OnCommand=cmd(diffusealpha,0.4;texcoordvelocity,1.5,-0.02;effectperiod,4;blend,'BlendMode_Add';);
+		OnCommand=cmd(diffusealpha,0.4;texcoordvelocity,1.5,-0.02;effectperiod,4;blend,'BlendMode_Add');
 		--bob;effectmagnitude,50,0,35;
 	};
-
 	LoadActor(THEME:GetPathB("","_shared/SN2/line")) .. {
 		InitCommand=cmd(x,550;y,0;zoomto,SCREEN_WIDTH*3,SCREEN_HEIGHT*10;diffuse,ColorLightTone(color("#FFFFFF"));rotationy,80;customtexturerect,0,0,SCREEN_WIDTH*1.5/48,SCREEN_HEIGHT*1.5/96);
 		OnCommand=cmd(diffusealpha,0.4;texcoordvelocity,-1.5,-0.02;effectperiod,4;blend,'BlendMode_Add';);
@@ -71,26 +70,26 @@ t[#t+1] = Def.ActorFrame {
 	LoadActor(THEME:GetPathB("","_shared/SN2/decoration01")) .. {
 		InitCommand=cmd(x,-330;zoomto,SCREEN_WIDTH*30,SCREEN_HEIGHT*30;diffuse,ColorLightTone(color("#FFFFFF"));rotationy,-85;customtexturerect,0,0,SCREEN_WIDTH*1.5/48,SCREEN_HEIGHT*1.5/96);
 		OnCommand=cmd(diffusealpha,0.4;texcoordvelocity,0.35,-0.02;effectperiod,4;blend,'BlendMode_Add';);
-
+		Condition=not ThemePrefs.Get("LightMode");
 	};
 	LoadActor(THEME:GetPathB("","_shared/SN2/decoration01")) .. {
 		InitCommand=cmd(x,330;zoomto,SCREEN_WIDTH*30,SCREEN_HEIGHT*30;diffuse,ColorLightTone(color("#FFFFFF"));rotationy,85;customtexturerect,0,0,SCREEN_WIDTH*1.5/48,SCREEN_HEIGHT*1.5/96);
 		OnCommand=cmd(diffusealpha,0.4;texcoordvelocity,-0.35,-0.02;effectperiod,4;blend,'BlendMode_Add';);
 		--bob;effectmagnitude,50,0,35;
+		Condition=not ThemePrefs.Get("LightMode");
 	};
 };
 	Def.ActorFrame{
+		Condition=not ThemePrefs.Get("LightMode");
 		LoadActor(THEME:GetPathB("","_shared/SN2/BoxBody")) .. {
-			InitCommand=cmd(zbuffer,true;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;z,-1000;zoom,10;rotationy,75;rotationx,0;diffusealpha,0.5;spin;effectmagnitude,35,10,20;blend,'BlendMode_Add');
+			InitCommand=cmd(zbuffer,true;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;z,-1000;zoom,40;rotationy,75;rotationx,0;diffusealpha,0.5;spin;effectmagnitude,35,10,20;blend,'BlendMode_Add');
 		};
 		LoadActor(THEME:GetPathB("","_shared/SN2/BoxBody")) .. {
-			InitCommand=cmd(zbuffer,true;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;z,-1000;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;zoom,20;rotationy,75;rotationx,0;diffuse,ColorLightTone(color("#FFFFFF"));spin;effectmagnitude,55,30,10;blend,'BlendMode_Add');
+			InitCommand=cmd(zbuffer,true;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;z,-1000;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;zoom,50;rotationy,75;rotationx,0;diffuse,ColorLightTone(color("#FFFFFF"));spin;effectmagnitude,55,30,10;blend,'BlendMode_Add');
 		};
 		LoadActor(THEME:GetPathB("","_shared/SN2/BoxBody")) .. {
-			InitCommand=cmd(zbuffer,true;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;z,-1000;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;zoom,30;rotationy,75;rotationx,0;diffuse,ColorLightTone(color("#FFFFFF"));spin;effectmagnitude,18,75,75;blend,'BlendMode_Add');
+			InitCommand=cmd(zbuffer,true;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;z,-1000;x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;zoom,60;rotationy,75;rotationx,0;diffuse,ColorLightTone(color("#FFFFFF"));spin;effectmagnitude,18,75,75;blend,'BlendMode_Add');
 		};
-	};
-	Def.ActorFrame{
 		LoadActor(THEME:GetPathB("","_shared/SN2/decoration02")) .. {
 			InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;),
 			OnCommand=cmd(diffusealpha,0;zoom,0;playcommand,"Animate");

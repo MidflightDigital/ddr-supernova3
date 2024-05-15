@@ -1,15 +1,20 @@
-function JudgmentTransformCommand( self, params )
-	local x = 0
-	local y = -76
-	-- ���o�[�X����Y���ݒ��A�Z���^�[�����{
-	if params.bReverse then y = 67 end
-	-- This makes no sense and wasn't even being used due to misspelling.
-	-- if bCentered then y = y * 2 end
-	self:x( x )
-	self:y( y )
-end
-
 -- �R���{�ݒ�
+function GetPrevSteps()
+	if PREFSMAN:GetPreference("OnlyDedicatedMenuButtons", true) then
+		return "MenuUP"
+	else
+		return ""
+	end
+end;
+
+function GetNextSteps()
+	if PREFSMAN:GetPreference("OnlyDedicatedMenuButtons", true) then
+		return "MenuDOWN"
+	else
+		return ""
+	end
+end;
+
 function ComboTransformCommand( self, params )
 	local x = 0
 	local y = 38
@@ -236,18 +241,6 @@ function JoinStringsWithSpace(a, b)
 	return a:gsub("%s*$","").." "..b:gsub("^%s*","")
 end
 
-function ToastyTriggersAt(_, level)
-	if level == 0 then
-		--the code that loads the toasty triggers appears to add 1 to this value.
-		--and ONLY this value.
-		return 24
-	elseif level == 1 then
-		return 25
-	else
-		return 50
-	end
-end
-
 --MakeDeck(source)
 --Takes a table and returns a deck based on that table.
 --A deck is a function that, when it is called, returns a random value from
@@ -270,11 +263,6 @@ function MakeDeck(source)
 		if next(keys) == nil then FindKeys() end
 		return source[table.remove(keys, ((#keys == 1) and 1 or math.random(1,#keys)))]
 	end
-end
-
-local videoRenderers = split(",",PREFSMAN:GetPreference("VideoRenderers"))
-if videoRenderers[1] == "d3d" then
-	Warn("Direct3D mode detected. Some visual effects may not work properly.\nDo not report these problems as bugs, they are limitations of Direct3D mode.")
 end
 
 function GetProfileIDForPlayer(pn)
@@ -340,3 +328,120 @@ end
 -- GetCharAnimPath(sPath)
 -- Easier access to Characters folder (taken from ScreenHowToPlay.cpp)
 function GetCharAnimPath(sPath) return "/Characters/"..sPath end
+
+--GhostCopy(source)
+--Returns an unwritable virtual copy of a table
+function GhostCopy(source)
+    local ghost_cache = setmetatable({}, {__mode="k"})
+    return setmetatable({}, {
+        __metatable = {__ghost=true},
+        __newindex = function()
+            error("tried to write to a ghost table", 2)
+        end,
+        __index = function(me, key)
+            if ghost_cache[key] then return ghost_cache[key] end
+            local result = source[key]
+            if type(result) == "table" then
+            	local mt = getmetatable(result)
+            	if type(mt) ~= "table" or (not mt.__ghost) then
+                	result = GhostCopy(result)
+                end
+                ghost_cache[key] = result
+            end
+            return result
+        end
+    })
+end
+
+
+function BitmapText:settextfmt(fmt, ...)
+	return self:settext(string.format(fmt, ...))
+end
+
+--why did i write this code
+do
+    local cache = {}
+    --this makes cache a weak table.
+    --if any actor in the cache is garbage collected by Lua, it is removed.
+    setmetatable(cache, {__mode="kv"})
+    local function internal(self, starting)
+        starting = starting or self
+        if cache[self] ~= nil then
+            --then for this actor no need to go through this process
+            cache[starting] = cache[self]
+            return cache[self]~=false and cache[self] or nil
+        elseif self.ScreenType then
+            --both roads end here
+            cache[self] = self
+            cache[starting] = self
+            return self
+        elseif self:GetParent() then
+            return internal(self:GetParent(), starting)
+        else
+            --nil is indistinguishable from nothing, so use false instead
+            cache[self] = false
+            cache[starting] = false
+            return nil
+        end
+    end
+    function Actor:GetContainingScreen()
+        return internal(self)
+    end
+end
+
+--stuff for doing update functions that i love so -tertu
+function CalculateWaitFrames(targetDelta, delta)
+    return math.max(1, math.round(targetDelta/delta))-1
+end
+
+--returns a function that returns true if the function should run this update
+function GetUpdateTimer(targetDelta)
+    local frameCounter = 0
+    return function()
+        if frameCounter == 0 then
+            frameCounter = CalculateWaitFrames(targetDelta, 1/DISPLAY:GetCumFPS())
+            return true
+        end
+        frameCounter = frameCounter - 1
+        return false
+    end
+end
+
+--we need this function because we need to get the current Steps for non-human players.
+--however, non-human players don't actually have a current Steps.
+function GetCurrentStepsPossiblyCPU(pn)
+	if not GAMESTATE:IsHumanPlayer(pn) then
+		return GAMESTATE:GetCurrentSteps(GAMESTATE:GetMasterPlayerNumber())
+	end
+	return GAMESTATE:GetCurrentSteps(pn)
+end
+
+--The exit row needs to be enabled sometimes for ScreenPlayerOptions to work properly.
+--These conditions are:
+--If ThreeKeyNavigation is enabled.
+--If ArbitrarySpeedMods are in use.
+function EnableExitRow()
+	if PREFSMAN:GetPreference "ThreeKeyNavigation" then
+		return true
+	end
+	if ThemePrefs.Get "SpeedModSource" == "arbitrary" then
+		return true
+	end
+	return false
+end
+
+function trim_whitespace(str)
+	return str:gsub("^%s*",""):gsub("%s*$","")
+end
+
+function print_table(tbl)
+	print('{')
+	for k,v in pairs(tbl) do
+		if type(v) == 'table' then
+			print(tostring(k)..'='); print_table(v)
+		else
+			print(tostring(k)..'='..tostring(v))
+		end
+	end
+	print('}')
+end

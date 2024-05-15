@@ -1,3 +1,7 @@
+--This file contains functions that exist in the "standard library" but either
+--do not work properly (in our opinion) or simply don't work at all.
+--Any code we write assumes these implementations of these functions.
+
 --It turns out that past tertu fucked this function up.
 --A fix will probably hit 5.1 but for now we're going to do this.
 function ThemeManager:GetAbsolutePath(sPath, optional)

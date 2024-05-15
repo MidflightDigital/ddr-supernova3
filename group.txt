@@ -1,0 +1,111 @@
+﻿group.ini support in DDR SuperNOVA 3
+------------------------------------
+
+To allow for greater flexibility when structuring songs, DDR SuperNOVA 3 r7 and later have partial support for A.C.'s group.ini format.
+
+It is defined here: http://sm.waiei.net/other/group.html (Japanese)
+This file is principally based on a Google "translation" of that page, augmented and corrected by checking:
+*the EXFolder Development Kit (http://sm.waiei.net/other/kit_exfolder.html)
+*waiei2 20170523A (http://sm.waiei.net/waiei2/)
+*the group.ini file included with FIXED Project 5 Append
+
+File format
+-----------
+A file called "group.ini" is placed in each group folder where you want to use its functionality.
+Despite the ini extension, the group.ini format is really an MSD-like format.
+The recommended encoding is UTF-8.
+
+Comments are supported by placing // at the beginning of the line *only*.
+No whitespace or anything else may precede it. 
+
+The general layout of a tag is:
+
+#tagname:content:content:...;
+
+Tag names are case-insensitive. Content areas may or may not be.
+There may be whitespace between or within content areas. Whitespace within content areas is significant, but between them it is not.
+Any characters that come before the #tagname will be ignored unless they would cause the line to be a comment.
+
+A commonly used content element is what I'll call a "list" for lack of a better term:
+
+subcontent|subcontent|...
+
+Whitespace is not significant between them.
+
+Note: when a song name is specified, it's actually specified by its directory name.
+
+Supported tags
+--------------
+#NAME:display_name;
+Sets the displayed name of the group to display_name.
+
+#MENUCOLOR:r,g,b,a:r,g,b,a|song_a|song_b|...:...;
+Controls the text color of song names.
+If no songs are specified, this sets the text color for every song in the group.
+If any number of songs are specified, this sets the text color just for those songs. This overrides any non-specific text color.
+
+#METERTYPE:DDR/ITG/DDR X:(the three)|song_a|...:...;
+This sets which rating scale is used for a group or a song within it.
+DDR corresponds to the classic 1-10 DDR scale. Its "hard threshold" is 11.
+ITG corresponds to the extended ITG scale. Its "hard threshold" is 13.
+DDR X corresponds to the current 1-20 DDR scale. Its "hard threshold" is 17.
+
+SuperNOVA 3 mainly uses this to decide which difficulty list mode to use.
+If this is not set, it uses the default. If it's set to DDR, it uses the classic difficulty list mode.
+If it's set to ITG or DDR X, it uses the X difficulty list mode.
+
+Unsupported standard* tags
+--------------------------
+(Some or all of these tags will eventually be supported.)
+#EXTRA*:;
+This is a large family of tags that control various Extra Stage related things.
+I haven't documented them yet.
+
+#COMMENT:free_text;
+This sets free_text as a comment for the group. If it contains a list, each element of the list will be placed on its own line.
+
+#URL:text;
+Sets text as a URL for the group. 
+
+#SORTLIST_FRONT:song_a:song_b:...;
+#SORTLIST_REAR:song_a:song_b:...;
+These put their arguments, in order, as the first or last songs of a group.
+If a song is in both tags, FRONT takes priority.
+
+#EXTRAATEND:0/1;
+If 1, EXTRA songs are sorted at the end of the group.
+This includes all songs listed:
+#EXTRA1LIST, #EXTRA2LIST, extra1.crs, extra2.crs
+
+#LYRICTYPE:Old;
+If this statement is present, lyric animations will act like they did in 3.9.
+If it is anything other than Old (likely not case sensitive) it will have no effect.
+
+*"standard" here means tags that A.C. documents at that page. No theme supports every group.ini tag. All themes ignore any tags they do not support.
+
+Other tags in the wild
+----------------------
+#USEEXTRACOLOR:0/1;
+Apparently XXmiX specific, and I can't download the XXmiX theme right now to check what it does.
+Probably controls whether the automatically chosen Extra Stage song gets the extra color.
+
+#BRANCHLIST:name|arrow>tag>lists|...;
+Apparently only supported by CyberiaStyle.
+Sets up a branching song set up in the style of DDR's EVOLVED songs.
+name is the name of the song to replace in the wheel.
+The arrow tag lines are:
+
+  Random>song>song...
+  A list of all of the possible random choices.
+
+  Jacket>path
+  Banner>path
+  The relative path to the banner and jacket graphics from the group.ini file.
+
+  Title>text
+  Artist>text
+  Self-explanatory.
+
+#GROUPCOLOR:r,g,b,a;
+Only supported by DDR SuperNOVA 3.
+Sets the color of the group on the wheel to the given color.

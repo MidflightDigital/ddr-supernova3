@@ -5,16 +5,11 @@ local t = Def.ActorFrame{};
 local visibilityOverride = nil
 
 local function setVisibility(self)
-    local song = GAMESTATE:GetCurrentSong();
-    local shouldShowBGScripts = visibilityOverride or false
-    if visibilityOverride == nil then
-        if song then
-            shouldShowBGScripts = not song:HasBGChanges()
-            if shouldShowBGScripts then
-                local opts = GAMESTATE:GetSongOptionsObject('ModsLevel_Current')
-                shouldShowBGScripts = not opts:StaticBackground()
-            end
-        end
+    local shouldShowBGScripts
+    if visibilityOverride ~= nil
+        shouldShowBGScripts = visibilityOverride
+    else
+        shouldShowBGScripts = ShowCharacterAnimations()
     end
     local bg = SCREENMAN:GetTopScreen():GetChild("SongBackground")
     if bg then
@@ -35,11 +30,7 @@ if #vids > 0 then
     repeat
         --Chooses one of the dancers
         local choose = table.remove(vids,(#vids == 1) and 1 or math.random(1,#vids))
-
-        --Sets the Dancer to be loaded
-        local charName = vids[choose]
-
-        danceVid = Characters.GetDancerVideo(charName)
+        danceVid = Characters.GetDancerVideo(choose)
     until (danceVid ~= nil) or (#vids == 0)
 
     if danceVid then

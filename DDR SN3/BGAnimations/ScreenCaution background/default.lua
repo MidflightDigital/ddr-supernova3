@@ -1,16 +1,8 @@
-local t = Def.ActorFrame{
-	InitCommand=cmd(Center;blend,Blend.Add;;);
-	LoadActor(THEME:GetPathB("","ScreenLogo background/bg"))..{
-		OnCommand=cmd(diffusealpha,1;sleep,2;linear,0.165;diffusealpha,0);
-	};
-	Def.Quad{
-		InitCommand=cmd(setsize,SCREEN_WIDTH,SCREEN_HEIGHT;diffuse,color("0,0,0,0.6"));
-		OnCommand=cmd(diffusealpha,0.6;sleep,2;linear,0.165;diffusealpha,0);
-	};
-};
+local t = Def.ActorFrame{};
 
 t[#t+1] = Def.ActorFrame {
 	Def.Sprite{
+		InitCommand=cmd(Center);
 		OnCommand=function(self)
 			if GAMESTATE:GetCoinMode() == "CoinMode_Home" then
 				self:Load(THEME:GetPathB("","ScreenCaution background/home"));

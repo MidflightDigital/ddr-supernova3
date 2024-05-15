@@ -8,17 +8,10 @@ function SMOnlineScreen()
 end
 
 function CorrectSSM()
-	Trace "Yes, we get called"
 	if IsStarterMode() then
 		return "ScreenSelectMusicStarter"
 	else
-		local stage = GAMESTATE:GetCurrentStage()
-		Trace(stage)
-		if stage == 'Stage_Extra1' or stage == 'Stage_Extra2' then
-			return "ScreenSelectMusicExtra"
-		else
-			return "ScreenSelectMusic"
-		end
+		return "ScreenSelectMusic"
 	end
 end
 
@@ -59,6 +52,7 @@ Branch.TitleMenu = function()
 end
 
 Branch.StartGame = function()
+	-- XXX: we don't theme this screen
 	if SONGMAN:GetNumSongs() == 0 and SONGMAN:GetNumAdditionalSongs() == 0 then
 		return "ScreenHowToInstallSongs"
 	end
@@ -105,16 +99,10 @@ Branch.AfterGameplay = function()
 		-- even though online mode isn't supported in this theme yet
 		return "ScreenNetEvaluation"
 	else
-		if GAMESTATE:IsCourseMode() then
-			if GAMESTATE:GetPlayMode() == 'PlayMode_Nonstop' then
-				return "ScreenEvaluationNonstop"
-			else	-- oni and endless are shared
-				return "ScreenEvaluationOni"
-			end
-		elseif GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
-			return "ScreenEvaluationRave"
+		if IsStarterMode() then
+			return "ScreenEvaluationNewStarter"
 		else
-			return "ScreenEvaluationNormal"
+			return "ScreenEvaluationNewNormal"
 		end
 	end
 end
@@ -125,7 +113,7 @@ Branch.AfterEvaluation = function()
 		return "ScreenProfileSave"
 	elseif GAMESTATE:GetCurrentStage() == "Stage_Extra1" then
 		if STATSMAN:GetCurStageStats():AllFailed() then
-			return "ScreenEvaluationSummary"
+			return "ScreenEvaluationNewSummary"
 		else
 			return "ScreenProfileSave"
 		end;
@@ -134,14 +122,14 @@ Branch.AfterEvaluation = function()
 	elseif GAMESTATE:IsCourseMode() then
 		return "ScreenProfileSaveSummary"
 	else
-		return "ScreenEvaluationSummary"
+		return "ScreenEvaluationNewSummary"
 	end
 end
 
 Branch.AfterSummary = "ScreenProfileSaveSummary"
 
 Branch.Network = function()
-	return IsNetConnected() and "ScreenTitleMenu" or "ScreenTitleMenu"
+	return "ScreenTitleMenu"
 end
 
 Branch.AfterSaveSummary = function()
@@ -153,11 +141,7 @@ Branch.AfterSaveSummary = function()
 end
 
 Branch.AfterDataSaveSummary = function()
-	if GAMESTATE:AnyPlayerHasRankingFeats() then
-		return "ScreenDataSaveSummaryEnd"
-	else
-		return "ScreenDataSaveSummaryEnd"
-	end
+	return "ScreenDataSaveSummaryEnd"
 end
 
 
@@ -166,15 +150,44 @@ Branch.Ending = function()
 	if GAMESTATE:IsEventMode() then
 		return SelectMusicOrCourse()
 	end
+	local going = Grade:Compare(STATSMAN:GetBestFinalGrade(), 'Grade_Tier03') <= 0
 	-- best final grade better than AA: show the credits.
 	-- otherwise, show music scroll.
-	return (STATSMAN:GetBestFinalGrade() <= 'Grade_Tier03' and SN3Debug) and "ScreenCredits" or "ScreenMusicScroll"
+
+	--enable this line once credits are complete
+	--return going and "ScreenCredits" or "ScreenMusicScroll"
+	return "ScreenMusicScroll"
 end
 
 Branch.AfterProfileLoad = function()
-	if GAMESTATE:GetNumPlayersEnabled() > 1 
-		or (not Player.SetLife) then
-		return "ScreenSelectPlayModeMulti"
+	return "ScreenSelectStyle"
+end
+
+Branch.AfterProfileSave = function()
+	if GAMESTATE:IsEventMode() then
+		return SelectMusicOrCourse()
+	elseif STATSMAN:GetCurStageStats():AllFailed() then
+		return "ScreenGameOver"
+	elseif GAMESTATE:IsExtraStage() or GAMESTATE:IsExtraStage2() then
+		--Part of the score-based Extra Stage hack.
+		--Doing anything except failing a song will earn ES, so we decide if it was actually earned.
+		local stats = STATSMAN:GetPlayedStageStats(1)
+		local actuallyQualified = false
+		for _, pn in pairs(GAMESTATE:GetHumanPlayers()) do
+			actuallyQualified = actuallyQualified or stats:GetPlayerStageStats(pn):GetScore() >= 950000
+		end
+		if actuallyQualified then
+			return SelectMusicOrCourse()
+		else
+			return "ScreenEvaluationNewSummary"
+		end
+	elseif GAMESTATE:GetSmallestNumStagesLeftForAnyHumanPlayer() == 0 then
+		if not GAMESTATE:IsCourseMode() then
+			return "ScreenEvaluationNewSummary"
+		else
+			return "ScreenGameOver"
+		end
+	else
+		return SelectMusicOrCourse()
 	end
-	return "ScreenSelectPlayMode"
 end

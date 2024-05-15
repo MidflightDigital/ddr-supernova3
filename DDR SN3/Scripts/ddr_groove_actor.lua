@@ -11,6 +11,7 @@
 --   A table of colors to use for each category. (optional)
 --   The name of the tween function to use when changing. (optional)
 --   The time to spend tweening. (optional)
+--   Whether the actor should act as if there are no steps if an edit is selected. (optional)
 -- Examples:
 --   t[#t+1]= create_ddr_groove_radar("P1_radar", _screen.cx * .5, _screen.cy, PLAYER_1)
 --   t[#t+1]= create_ddr_groove_radar("P2_radar", _screen.cx*1.5, _screen.cy,
@@ -84,7 +85,7 @@ end
 
 function self_play_set(self, param) self:playcommand("Set", param) end
 
-function create_ddr_groove_radar(actor_name, x, y, pn, size, center_color, category_colors, tween_type, tween_time)
+function create_ddr_groove_radar(actor_name, x, y, pn, size, center_color, category_colors, tween_type, tween_time, hide_on_edit)
 	size= size or 50
 	center_color= center_color or {1, 1, 1, 1}
 	category_colors= category_colors or {}
@@ -108,7 +109,7 @@ function create_ddr_groove_radar(actor_name, x, y, pn, size, center_color, categ
 			["CurrentSteps"..ToEnumShortString(pn).."ChangedMessageCommand"]= self_play_set,
 			SetCommand= function(self)
 				local player_steps= GAMESTATE:GetCurrentSteps(pn)
-				if not player_steps then
+				if (not player_steps) or (player_steps:GetDifficulty() == 'Difficulty_Edit' and hide_on_edit) then
 					self:stoptweening()[tween_type](self, tween_time):zoom(0)
 					return
 				end

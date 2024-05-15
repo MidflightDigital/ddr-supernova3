@@ -16,19 +16,19 @@ end;
 ----------------------------------------------------------------------------
 return Def.ActorFrame {
 	Def.Sprite{
-	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y);
-	OnCommand=function(self)
-		if GAMESTATE:GetPlayMode() == 'PlayMode_Regular' or GAMESTATE:GetPlayMode() == 'PlayMode_Battle' or GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then 
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage " .. ToEnumShortString(sStage) ));
-		elseif GAMESTATE:GetPlayMode() == 'PlayMode_Oni' then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage oni"));
-		elseif GAMESTATE:GetPlayMode() == 'PlayMode_Nonstop' then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage Nonstop"));
-		elseif (GAMESTATE:Env()).EndlessState then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage endless"));
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y);
+		OnCommand=function(self)
+			if GAMESTATE:GetPlayMode() == 'PlayMode_Regular' or GAMESTATE:GetPlayMode() == 'PlayMode_Battle' or GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
+				self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage " .. ToEnumShortString(sStage) ));
+			elseif GAMESTATE:GetPlayMode() == 'PlayMode_Oni' then
+				self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage oni"));
+			elseif GAMESTATE:GetPlayMode() == 'PlayMode_Nonstop' then
+				self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage Nonstop"));
+			elseif (GAMESTATE:Env()).EndlessState then
+				self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage endless"));
+			end;
+			self:diffusealpha(0):sleep(0.132)
+			:linear(0.264):diffusealpha(1);
 		end;
-	self:diffusealpha(0):sleep(0.132)
-	:linear(0.264):diffusealpha(1);
-	end;
 	};
 };

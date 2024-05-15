@@ -76,7 +76,6 @@ function WheelLightEX(pn, itemMode)
 		end
 	end
 	local function P1Response(s, params)
-		print("P1Response")
 		if pn == 'PlayerNumber_P1' then
 			s:playcommand("Set", params);
 		end

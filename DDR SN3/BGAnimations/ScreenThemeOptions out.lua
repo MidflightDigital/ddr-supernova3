@@ -1,4 +1,3 @@
-InitUserPrefs();
 local t = Def.ActorFrame{
   OnCommand=function(self)
     if not FILEMAN:DoesFileExist("Save/ThemePrefs.ini") then

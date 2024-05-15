@@ -4,15 +4,7 @@
 local t = Def.ActorFrame{};
 
 local function setVisibility(self)
-    local song = GAMESTATE:GetCurrentSong();
-    local shouldShowBGScripts = false
-    if song then
-        shouldShowBGScripts = not song:HasBGChanges()
-        if shouldShowBGScripts then
-            local opts = GAMESTATE:GetSongOptionsObject('ModsLevel_Current')
-            shouldShowBGScripts = not opts:StaticBackground()
-        end
-    end
+    local shouldShowBGScripts = ShowCharacterAnimations()
     local bg = SCREENMAN:GetTopScreen():GetChild("SongBackground")
     if bg then
         bg:visible(not shouldShowBGScripts);
@@ -23,8 +15,7 @@ end
 t.OnCommand = setVisibility
 t.CurrentSongChangedMessageCommand = setVisibility
 
-local charName = (GAMESTATE:Env())['SNCharacter'..
-    ToEnumShortString(GAMESTATE:GetMasterPlayerNumber())] or ""
+local charName = ResolveCharacterName(GAMESTATE:GetMasterPlayerNumber())
 
 local loadWorked = false
 local potentialVideo = Characters.GetDancerVideo(charName)

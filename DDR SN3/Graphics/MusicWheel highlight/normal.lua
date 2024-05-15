@@ -23,7 +23,7 @@ end;
 if GAMESTATE:GetCoinMode() == 'CoinMode_Home' and SCREENMAN:GetTopScreen() ~= "ScreenNetRoom" then
 for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 t[#t+1] = Def.ActorFrame {
-	LoadActor("frame.png")..{
+	LoadActor("frame")..{
 	OnCommand=cmd(queuecommand,"Set");
 	BeginCommand=function(self,param)
 		if not GAMESTATE:IsPlayerEnabled('PlayerNumber_P1') then
@@ -92,7 +92,7 @@ local yPosPlayer = {
 
 --Player Scores
 for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
-t[#t+1] = Def.RollingNumbers{
+t[#t+1] = Def.BitmapText{
 	Font="ScreenSelectMusic score",
 	CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 	CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
@@ -104,7 +104,6 @@ t[#t+1] = Def.RollingNumbers{
 		local short = ToEnumShortString(pn)
 		self:x(40):y(yPosPlayer[short])
 		:diffusealpha(0)
-		:Load("RollingNumbersMusic")
 	end;
 	OnCommand=cmd(queuecommand,"Set");
 	SetCommand= function(self)
@@ -134,17 +133,24 @@ t[#t+1] = Def.RollingNumbers{
 		assert(scorelist)
 		local scores = scorelist:GetHighScores();
 		if scores[1] then
-			topscore = scores[1]:GetScore()
+			if ThemePrefs.Get "ConvertScoresAndGrades" and (not GAMESTATE:IsCourseMode()) then
+				topscore = 10*math.round(SN2Scoring.GetSN2ScoreFromHighScore(StepsOrTrail, scores[1])/10)
+			else
+				topscore = scores[1]:GetScore()
+			end
 		else
 			topscore = 0;
 		end;
 		assert(topscore)
 		if topscore ~= 0 then
-			self:diffusealpha(1)
-			:targetnumber(topscore)
+			self:ClearAttributes():diffusealpha(1)
+			local attr = GetLeadingAttribute(topscore, 7, {0.5,0.5,0.5,1})
+			if attr then
+				self:AddAttribute(0, attr)
+			end
+			self:settext(string.format("%07d",tostring(math.floor(topscore))))
 		else
 			self:diffusealpha(0)
-			:targetnumber(0)
 		end
 	else
 		self:diffusealpha(0)
@@ -217,6 +223,10 @@ t[#t+1] = Def.Quad{
 						if scores[1]:GetScore()==1000000 and topgrade=="Grade_Tier07" then
 							self:Load(THEME:GetPathG("GradeDisplayEval","Tier01"));
 							self:diffusealpha(1);
+						elseif topgrade=="Grade_Tier07" or topgrade=="Grade_Failed" then
+							self:diffusealpha(0);
+						elseif topgrade >= "Grade_Tier08" then
+							self:diffusealpha(0);
 						else
 							self:Load(THEME:GetPathG("GradeDisplayEval",ToEnumShortString(topgrade)));
 							self:diffusealpha(1);
@@ -234,13 +244,26 @@ t[#t+1] = Def.Quad{
 };
 end;
 
-
+if ThemePrefs.Get("LightMode") == false then
 t[#t+1] = Def.Sprite {
 Texture="WheelEffect 5x4",
 	InitCommand=function(self)
 		self:draworder(100):x(-73)
-		self:effectclock('beatnooffset'):SetAllStateDelays(0.1)
+
 	end,
+	CurrentSongChangedMessageCommand=function(self)
+		local song = GAMESTATE:GetCurrentSong()
+		if not song then return end
+		if song:IsDisplayBpmRandom() or song:IsDisplayBpmSecret() then
+			self:effectclock('musicnooffset'):SetAllStateDelays(0.02)
+		else
+			self:effectclock('beatnooffset'):SetAllStateDelays(0.1)
+		end;
+	end;
+	RandomCommand=function(self)
+
+	end;
 };
+end;
 
 return t;

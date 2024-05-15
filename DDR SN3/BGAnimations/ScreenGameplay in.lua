@@ -58,13 +58,14 @@ t[#t+1] = LoadActor("ScreenStageInformation in/cd")..{
 	OnCommand=function(s) s:accelerate(0.05):zoomx(0):accelerate(0.05):zoomy(0) end
 };
 
-t[#t+1] = Def.Sprite {
-	Texture="ScreenStageInformation in/rayo 1x2.png",
-		InitCommand=function(self)
-			self:Center()
-			self:SetAllStateDelays(0.082)
+t[#t+1] = Def.ActorFrame {
+	Def.Quad{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;zoomx,0;setsize,570,72;fadeleft,1;faderight,1;diffuse,color("0,1,0.5,1"));
+		OnCommand=function(self)
+			self:diffusealpha(1):zoomx(1):sleep(0.85)
+			:linear(0.25):zoomx(0):diffusealpha(0);
 		end;
-		OnCommand=cmd(accelerate,0.198;glowshift;diffusealpha,0);
+	};
 };
 
 t[#t+1] = LoadActor("ScreenStageInformation in/bottom_stage")..{
@@ -82,13 +83,13 @@ t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y);
 	OnCommand=function(self)
 		if GAMESTATE:GetPlayMode() == 'PlayMode_Regular' or GAMESTATE:GetPlayMode() == 'PlayMode_Battle' or GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage " .. ToEnumShortString(sStage) ));
+			self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage " .. ToEnumShortString(sStage) ));
 		elseif GAMESTATE:GetPlayMode() == 'PlayMode_Oni' then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage oni"));
+			self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage oni"));
 		elseif GAMESTATE:GetPlayMode() == 'PlayMode_Nonstop' then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage Nonstop"));
+			self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage Nonstop"));
 		elseif (GAMESTATE:Env()).EndlessState then
-			self:Load(THEME:GetPathG("ScreenStageInformation", "Stage endless"));
+			self:Load(THEME:GetPathG("_Stages/ScreenStageInformation", "Stage endless"));
 		end;
 	self:sleep(0.8)
 	:linear(0.1):diffusealpha(0);

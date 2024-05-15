@@ -15,7 +15,7 @@ local function GetPosition(pn)
 	local strSide = (NumSides == 1) and "OneSide" or "TwoSides";
 	return THEME:GetMetric("ScreenGameplay","Player".. ToEnumShortString(pn) .. strPlayer .. strSide .."X");--]]
 	if st == "StepsType_Dance_Double" or st == "StepsType_Dance_Solo" or Center1Player then return SCREEN_WIDTH/2;
-	else 
+	else
 	local strPlayer = (NumPlayers == 1) and "OnePlayer" or "TwoPlayers";
 	local strSide = (NumSides == 1) and "OneSide" or "TwoSides";
 	return THEME:GetMetric("ScreenGameplay","Player".. ToEnumShortString(pn) .. strPlayer .. strSide .."X");
@@ -96,20 +96,18 @@ t[#t+1] = Def.ActorFrame{
 		InitCommand=function(self)
 			if GAMESTATE:PlayerIsUsingModifier(pn,'reverse') then
 				self:y(SCREEN_CENTER_Y+152);
-				self:addy(80);
 			else
-				self:y(SCREEN_CENTER_Y-160);
-				self:addy(-80);
+				self:y(SCREEN_CENTER_Y-152);
 			end;
 			self:diffusealpha(1);
 		end;
 		-- Left - down in single
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
-					self:addx(-48);
+					self:addx(-36);
 					self:rotationz(-25);
 					self:zoom(2);
 					self:linear(0.5);
@@ -123,11 +121,11 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Right - up in single
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
-					self:addx(48);
+					self:addx(36);
 					self:rotationz(35);
 					self:zoom(2);
 					self:linear(0.5);
@@ -141,11 +139,11 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Left2 - left in single
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
-					self:addx(-144);
+					self:addx(-108);
 					self:rotationz(-60);
 					self:zoom(2);
 					self:linear(0.5);
@@ -159,11 +157,11 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Right2 - right in single
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
-					self:addx(144);
+					self:addx(108);
 					self:rotationz(90);
 					self:zoom(2);
 					self:linear(0.5);
@@ -177,7 +175,7 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Left3 Solo and Double
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);zoom,0.75;
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
@@ -196,7 +194,7 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Right3 Solo and Double
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
@@ -215,7 +213,7 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Left4 Double
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
@@ -234,7 +232,7 @@ t[#t+1] = Def.ActorFrame{
 		};
 		-- Right4 Double
 		LoadActor("Star") .. {
-			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1);
+			InitCommand=cmd(blend,"BlendMode_Add";diffusealpha,1;zoom,0.75);
 			OffCommand=function(self)
 				if pss:FullCombo() or pss:FullComboOfScore('TapNoteScore_W3') then
 					self:diffusealpha(1);
@@ -252,7 +250,7 @@ t[#t+1] = Def.ActorFrame{
 			Condition=st == "StepsType_Dance_Double";
 		};
 	};
-	
+
 	-- Up gradation
 	LoadActor("Down") .. {
 		InitCommand=cmd(vertalign,bottom);
@@ -288,7 +286,7 @@ t[#t+1] = Def.ActorFrame{
 			end;
 		end;
 	};
-	
+
 	-- Slim light
 	Def.ActorFrame{
 		InitCommand=function(self)
@@ -435,7 +433,7 @@ t[#t+1] = Def.ActorFrame{
 			Condition=st == "StepsType_Dance_Double";
 		};
 	};
-	
+
 	-- Star
 	LoadActor("Star") .. {
 		InitCommand=cmd(blend,Blend.Add);
@@ -517,7 +515,7 @@ t[#t+1] = Def.ActorFrame{
 					self:diffusealpha(1);
 					self:linear(0.24);
 					self:zoomy(-1);
-					
+
 					self:linear(0.5);
 					self:zoomx(1);
 					self:addx(-14);
@@ -536,7 +534,7 @@ t[#t+1] = Def.ActorFrame{
 					self:diffusealpha(1);
 					self:linear(0.24);
 					self:zoomy(1);
-					
+
 					self:linear(0.5);
 					self:zoomx(1);
 					self:addx(-14);
@@ -549,7 +547,7 @@ t[#t+1] = Def.ActorFrame{
 			end;
 		end;
 	};
-	
+
 	-- Right gradation
 	LoadActor("Gradation") .. {
 		InitCommand=cmd(vertalign,top;horizalign,right);
@@ -565,7 +563,7 @@ t[#t+1] = Def.ActorFrame{
 					self:diffusealpha(1);
 					self:linear(0.24);
 					self:zoomy(-1);
-					
+
 					self:linear(0.5);
 					self:zoomx(-1);
 					self:addx(14);
@@ -584,7 +582,7 @@ t[#t+1] = Def.ActorFrame{
 					self:diffusealpha(1);
 					self:linear(0.24);
 					self:zoomy(1);
-					
+
 					self:linear(0.5);
 					self:zoomx(-1);
 					self:addx(14);
@@ -706,8 +704,8 @@ t[#t+1] = Def.ActorFrame{
 			end;
 		end;
 	};
-	
-	
+
+
 	-- Ring
 	LoadActor( "Fullcombo01" ) .. {
 		InitCommand=function(self)
@@ -737,7 +735,7 @@ t[#t+1] = Def.ActorFrame{
 			end;
 		end;
 	};
-	
+
 	-- Ring bar
 	LoadActor( "Fullcombo02" ) .. {
 		InitCommand=function(self)
@@ -767,7 +765,7 @@ t[#t+1] = Def.ActorFrame{
 			end;
 		end;
 	};
-	
+
 };
 
 -- Star highlight

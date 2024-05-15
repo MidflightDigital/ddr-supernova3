@@ -1,11 +1,10 @@
 return Def.ActorFrame{
-	LoadActor("Door1")..{
-		InitCommand=cmd(x,SCREEN_CENTER_X+50;y,SCREEN_CENTER_Y;zoom,1.01;halign,1);
-		OnCommand=cmd(linear,0.792;x,SCREEN_CENTER_X-SCREEN_WIDTH);
+	LoadActor("_newer door2")..{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_BOTTOM;valign,1);
+		OnCommand=cmd(linear,0.792;y,SCREEN_BOTTOM+SCREEN_HEIGHT);
 	};
-	LoadActor("Door2")..{
-		InitCommand=cmd(x,SCREEN_CENTER_X-50;y,SCREEN_CENTER_Y;zoom,1.01;halign,0);
-		OnCommand=cmd(linear,0.792;x,SCREEN_CENTER_X+SCREEN_WIDTH);
+	LoadActor("_newer door1")..{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_TOP;valign,0);
+		OnCommand=cmd(linear,0.792;y,SCREEN_TOP-SCREEN_HEIGHT);
 	};
-
 }

@@ -52,6 +52,15 @@ function EndlessScoring.Create(level)
     }
 end
 
+--XXX: don't be a lazy bastard
+local levelDivisor = {
+    _MeterType_DDR = 1,
+    _MeterType_DDRX = 1.5,
+    _MeterType_ITG = 1,
+    _MeterType_Pump = 1.65,
+    _MeterType_Default = 1
+}
+
 Endless = {}
 
 function Endless.GetSongChartBlock(stepsType, minLevel, maxLevel)
@@ -59,10 +68,11 @@ function Endless.GetSongChartBlock(stepsType, minLevel, maxLevel)
     assert(minLevel <= maxLevel)
     for _, song in pairs(SONGMAN:GetAllSongs()) do
         if UNLOCKMAN:IsSongLocked(song) == 0 then
+            local divisor = levelDivisor[SongAttributes.GetMeterType(song)]
             for _, steps in pairs(song:GetStepsByStepsType(stepsType)) do
                 if not (steps:GetDifficulty() == 'Difficulty_Edit') then
                     local meter = steps:GetMeter()
-                    if (meter >= minLevel) and (meter <= maxLevel) then
+                    if (meter >= minLevel/divisor) and (meter <= maxLevel/divisor) then
                         table.insert(ret, {song, steps})
                     end
                 end
@@ -74,12 +84,14 @@ end
 
 --The first four are Lv. 1-4, the fifth is All, and the sixth is the unlockable
 --Lv. 5.
+--using -infinity as a lower bound rather than level 1 allows Pump and DDR X 1s
+--(which end up being in the 0.6-0.7 range after division) to be included
 local levelToRange = {
-    {1,3},
+    {-math.huge,3},
     {3,5},
     {5,7},
     {7,9},
-    {1,math.huge},
+    {-math.huge,math.huge},
     {9,math.huge}
 }
 
@@ -89,4 +101,8 @@ function Endless.CreateState(stepsType, endlessLevel, breakStages)
     return {scoring=EndlessScoring.Create(endlessLevel), 
         choiceDeck = MakeDeck(Endless.GetSongChartBlock(stepsType, minLevel, maxLevel)),
         breakAfter=breakStages}
+end
+
+function EndlessLockedMessage()
+    return SCREENMAN:SystemMessage(THEME:GetString("ScreenSelectPlayMode", "EndlessLocked"))
 end

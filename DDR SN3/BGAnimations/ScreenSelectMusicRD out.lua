@@ -1,0 +1,2 @@
+LoadFromProfilePrefs()
+return Def.ActorFrame{};

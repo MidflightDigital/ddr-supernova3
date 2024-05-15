@@ -56,34 +56,36 @@ t[#t+1] = Def.ActorFrame{
 	Def.ActorFrame{
 	InitCommand=cmd(spin;effectmagnitude,-1.5,2,-1.5;Center;zoom,0.5;blend,Blend.Add;);
 		LoadActor(THEME:GetPathB("","_shared/SN1/SuperNOVABG.txt"))..{
-			InitCommand=cmd(clearzbuffer,0;rotationx,-90;rotationz,-90;diffuse,color("0.75,0.75,0.75,0.5");zoom,8;fadebottom,1;blend,Blend.Add;);
+			InitCommand=cmd(clearzbuffer,0;rotationx,-90;rotationz,-90;diffuse,color("0.75,0.75,0.75,0.5");zoom,8;fadebottom,1;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 		};
 		Def.ActorFrame{
 			InitCommand=cmd(zoom,8;x,SCREEN_WIDTH/2);
 			LoadActor(THEME:GetPathB("","_shared/SN1/SuperNovaBallFog (DoubleFaced).txt"))..{
-				InitCommand=cmd(diffuse,color("1,1,1,0.5");spin;effectmagnitude,10,100,10;);
+				InitCommand=cmd(diffuse,color("1,1,1,0.5");spin;effectmagnitude,10,100,10;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 			};
 			LoadActor(THEME:GetPathB("","_shared/SN1/SuperNovaFogBall (DoubleFaced).txt"))..{
-				InitCommand=cmd(diffuse,color("1,1,1,0.5");zoom,0.9;spin;effectmagnitude,10,100,10;);
+				InitCommand=cmd(diffuse,color("1,1,1,0.5");zoom,0.9;spin;effectmagnitude,10,100,10;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 			};
 			LoadActor(THEME:GetPathB("","_shared/SN1/SuperNovaBallLine (DoubleFaced).txt"))..{
-				InitCommand=cmd(diffuse,color("0.8,0.8,0.8,1");rotationx,-200;rotationz,-90;rotationy,-60;spin;effectmagnitude,100,100,100);
+				InitCommand=cmd(diffuse,color("0.8,0.8,0.8,1");rotationx,-200;rotationz,-90;rotationy,-60;spin;effectmagnitude,100,100,100;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 			};
 			LoadActor(THEME:GetPathB("","_shared/SN1/SuperNovaBallLine (DoubleFaced).txt"))..{
-				InitCommand=cmd(diffuse,color("0.8,0.8,0.8,1");rotationx,200;rotationz,90;rotationy,60;spin;effectmagnitude,-100,-100,-100);
+				InitCommand=cmd(diffuse,color("0.8,0.8,0.8,1");rotationx,200;rotationz,90;rotationy,60;spin;effectmagnitude,-100,-100,-100;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 			};
 			LoadActor(THEME:GetPathB("","_shared/SN1/SuperNovaBall (DoubleFaced).txt"))..{
-				InitCommand=cmd(diffuse,color("0.6,0.6,0.6,1");spin;effectmagnitude,10,100,10;);
+				InitCommand=cmd(diffuse,color("0.6,0.6,0.6,1");spin;effectmagnitude,10,100,10;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 			};
+			Condition=not ThemePrefs.Get("LightMode");
 		};
 	};
 	Def.ActorFrame{
 		LoadActor(THEME:GetPathB("","_shared/SN1/SuperNOVALine.txt"))..{
-			InitCommand=cmd(diffuse,color("0.4,0.4,0.4,1");Center;rotationx,-200;rotationz,90;rotationy,60;zoom,12;spin;effectmagnitude,100,100,100);
+			InitCommand=cmd(Center;rotationx,-200;rotationz,90;rotationy,60;zoom,12;spin;effectmagnitude,100,100,100;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 		};
 		LoadActor(THEME:GetPathB("","_shared/SN1/SuperNOVALine.txt"))..{
-			InitCommand=cmd(diffuse,color("0.4,0.4,0.4,1");Center;rotationx,200;rotationz,-90;rotationy,60;zoom,12;spin;effectmagnitude,-100,-100,-100);
+			InitCommand=cmd(Center;rotationx,200;rotationz,-90;rotationy,60;zoom,12;spin;effectmagnitude,-100,-100,-100;blend,Blend.Add;;diffusealpha,0.25;glow,color("1,1,1,0.3"));
 		};
+		Condition=not ThemePrefs.Get("LightMode");
 	};
 };
 

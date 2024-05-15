@@ -1,13 +1,26 @@
+--SNCharacters v1.1 (13 March 2017)
+--version 2 characters added and supported.
+--GetAssetPath added to abstract differences away a bit.
+--GetPathIfValid added to make it so that...
+--most functions won't operate on an invalid character now.
 Characters = {}
 local c = Characters
 
-local requiredFiles = {"combo.png", "combo100.png"}
+--each line corresponds to a version.
+--v1 represents characters as used in SN2 and X.
+--v2 represents characters as used in X2 on.
+local requiredFiles =
+{
+	{"combo.png", "combo100.png"},
+	{"comboA.png", "comboB.png", "combo100.png"},
+	{"comboA.png", "comboB.png", "combo100.png"}
+}
 
 local rootPath = "/SNCharacters/"
 
 --Returns the base path for a character or none if that character doesn't exist.
 function Characters.GetPath(name)
-    if (not name) or (name == "") then
+    if (not name) or (name == "") or (string.lower(name) == "random") then
         return nil
     end
     if string.find(name, "/") then
@@ -33,7 +46,10 @@ local function ValidateAndProcessConfig(loadedCfg)
     if (loadedCfg.version < 1) then
         return false, "invalid version field"
     end
-    if (loadedCfg.version > 1) then
+    if (loadedCfg.version ~= math.floor(loadedCfg.version)) then
+    	return false, "version is not an integer"
+    end
+    if (loadedCfg.version > 3) then
         return false, "version too new"
     end
     local colorDef = loadedCfg.color
@@ -103,8 +119,9 @@ local function ValidateInternal(name)
     local charPath = c.GetPath(name)
     if charPath then
         --presumably we want to recheck the config every time we actually run
-        if c.GetConfig(name, true) then
-            for fileName in ivalues(requiredFiles) do
+        local config = c.GetConfig(name, true)
+        if config then
+            for fileName in ivalues(requiredFiles[config.version]) do
                 if not FILEMAN:DoesFileExist(charPath..fileName) then
                     return false
                 end
@@ -116,6 +133,9 @@ local function ValidateInternal(name)
 end
 
 function Characters.Validate(name, forceRecheck)
+    if not name then
+        return nil
+    end
     if (characterValidity[name]~=nil and (not forceRecheck)) then
         return characterValidity[name]
     else
@@ -130,6 +150,11 @@ ClearValidateCache = function() characterValidity = {} end
 end
 --!!end Characters.Validate!!
 
+function Characters.GetPathIfValid(name)
+	if name and c.Validate(name) then
+		return c.GetPath(name)
+	end
+end
 
 --Returns a table with every character name in it, unvalidated.
 function Characters.GetAllPotentialCharacterNames()
@@ -152,7 +177,7 @@ end
 --Returns a dancer video or nothing if none exist.
 function Characters.GetDancerVideo(name)
     local potentialVideos = {}
-    local charPath = c.GetPath(name)
+    local charPath = c.GetPathIfValid(name)
     if charPath then
         charPath = charPath .. "DancerVideos/"
         local listing = FILEMAN:GetDirListing(charPath, false, true)
@@ -172,7 +197,28 @@ function Characters.GetDancerVideo(name)
     end
 end
 
-
+do
+	local missingAssetFallbacks = {
+		["combo.png"] = "comboA.png",
+		["comboA.png"] = "combo.png",
+		["comboB.png"] = "combo.png"
+	}
+	function Characters.GetAssetPath(name, asset)
+		local charPath = c.GetPathIfValid(name)
+		if charPath then
+			local targetName = charPath..asset
+			if FILEMAN:DoesFileExist(targetName) then
+				return targetName
+			end
+			--try a fallback
+			targetName = charPath..missingAssetFallbacks[asset]
+			if FILEMAN:DoesFileExist(targetName) then
+				return targetName
+			end
+		end
+	end
+end
+--!!end Characters.GetAssetPath()
 
 --an OptionRow, because we need a way to pick this stuff somehow
 
@@ -183,6 +229,7 @@ function OptionRowCharacters()
         choiceListReverse[name] = index
     end
     table.insert(choiceList, 1, THEME:GetString('OptionNames','Off'))
+    table.insert(choiceList, 2, "random")
     local t = {
         Name="Characters",
         LayoutType = "ShowAllInRow",
@@ -195,7 +242,9 @@ function OptionRowCharacters()
             local env = GAMESTATE:Env()
             local currentChar = env['SNCharacter'..pn]
             if choiceListReverse[currentChar] then
-                list[choiceListReverse[currentChar]+1] = true
+                list[choiceListReverse[currentChar]+2] = true
+            elseif currentChar == "random" then
+                list[2] = true
             else
                 list[1] = true
             end
@@ -211,8 +260,6 @@ function OptionRowCharacters()
                     else
                         env[varName] = choiceList[idx]
                     end
-                    --nothing bad would happen if i didn't break here
-                    --but it would be a waste of (not very much) time
                     break
                 end
             end
@@ -224,12 +271,58 @@ function OptionRowCharacters()
     return t
 end
 
+function ShowCharacterAnimations()
+    if GAMESTATE then
+        local song = GAMESTATE:GetCurrentSong()
+        if song and not song:HasBGChanges() then
+            local song_options = GAMESTATE:GetSongOptionsObject('ModsLevel_Current')
+            if not song_options:StaticBackground() then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+function GetRandomCharacter(pn)
+    assert(GAMESTATE and STATSMAN, "what are you doing")
+    local env = GAMESTATE:Env()
+    if not env.RandomCharacter then
+        env.RandomCharacter = {PlayerNumber_P1={}, PlayerNumber_P2={}}
+    end
+    local this_rc = env.RandomCharacter[pn]
+    local stage = STATSMAN:GetStagesPlayed()
+    local course_mode = GAMESTATE:IsCourseMode()
+    if (not course_mode and this_rc.stage ~= stage) 
+        or (course_mode and not this_rc.char)
+    then
+        if SN3Debug then
+            print("picking new random character. old stage: "
+                ..tostring(this_rc.stage).." new stage: "..tostring(stage))
+        end
+        local chars = Characters.GetAllCharacterNames()
+        this_rc.stage = stage
+        this_rc.char = chars[math.random(1,#chars)]
+    end
+    return this_rc.char
+end
+
+function ResolveCharacterName(pn)
+    local name = (GAMESTATE:Env())['SNCharacter'..ToEnumShortString(pn)] or ""    
+    if string.lower(name) ~= "random" then
+        return name
+    else
+        return GetRandomCharacter(pn)
+    end
+end
+
+
 if SN3Debug then
     Trace("potential characters: "..table.concat(c.GetAllPotentialCharacterNames(), " "))
     Trace("valid characters: "..table.concat(c.GetAllCharacterNames(), " "))
 end
 
--- (c) 2016 John Walstrom
+-- (c) 2016-2018 John Walstrom, "Inorizushi"
 -- All rights reserved.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a

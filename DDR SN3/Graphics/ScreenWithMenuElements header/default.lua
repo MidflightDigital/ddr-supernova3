@@ -8,33 +8,37 @@ elseif screenName == "ScreenSelectMusicStarter" then
     headerTextImage = "MusicStrt (doubleres).png"
 elseif screenName == "ScreenSelectMusicExtra" then
     headerTextImage = "extra (doubleres).png"
+  elseif screenName == "ScreenSelectMusicRD" then
+      headerTextImage = "_MusicRCD (doubleres).png"
+
 elseif string.find(screenName, "Options") then
     headerTextImage = "Options (doubleres).png"
+
 elseif screenName == "ScreenNetRoom" or screenName == "ScreenNetSelectMusic" or screenName == "ScreenSMOnlineLogin" then
     headerTextImage = "Online (doubleres).png"
+
 elseif screenName == "ScreenMapControllers" then
 	headerTextImage = "Options (doubleres).png"
+
 elseif screenName == "ScreenSelectStyle" then
     headerTextImage = "Style (doubleres).png"
-elseif screenName == "ScreenSelectPlayMode" 
-	or screenName == "ScreenSelectPlayCourseMode" 
+
+elseif screenName == "ScreenSelectPlayMode"
+	or screenName == "ScreenSelectPlayCourseMode"
 	or screenName == "ScreenSelectPlayModeMulti" then
     headerTextImage = "Mode (doubleres).png"
+
 elseif screenName == "ScreenSelectCourse" then
     headerTextImage = "Course (doubleres).png"
+
 elseif screenName == "ScreenSelectProfile" then
 	headerTextImage = "profile (doubleres).png"
+
 elseif screenName == "ScreenDataSaveSummary" then
 	headerTextImage = "save (doubleres).png"
-elseif screenName == "ScreenEvaluationNormal" then
-	headerTextImage = "eval (doubleres).png"
-elseif screenName == "ScreenEvaluationSummary" then
-	headerTextImage = "eval (doubleres).png"
-elseif screenName == "ScreenEvaluationOni" then
-	headerTextImage = "eval (doubleres).png"
-elseif screenName == "ScreenEvaluationNonstop" then
-	headerTextImage = "eval (doubleres).png"
-elseif screenName == "ScreenNetEvaluation" then
+
+elseif string.find(screenName, "ScreenEvaluation")
+  or screenName == "ScreenNetEvaluation" then
 	headerTextImage = "eval (doubleres).png"
 end
 
@@ -44,20 +48,15 @@ if screenName == "ScreenSelectProfile" then
 	headerBaseImage = "centerbase (doubleres).png"
 elseif screenName == "ScreenDataSaveSummary" then
 	headerBaseImage = "centerbase (doubleres).png"
-elseif screenName == "ScreenEvaluationNormal" then
+elseif string.find(screenName, "ScreenEvaluation")
+  or screenName == "ScreenNetEvaluation" then
 	headerBaseImage = "centerbase (doubleres).png"
-elseif screenName == "ScreenEvaluationSummary" then
-	headerBaseImage = "centerbase (doubleres).png"
-elseif screenName == "ScreenEvaluationOni" then
-	headerBaseImage = "centerbase (doubleres).png"
-elseif screenName == "ScreenEvaluationNonstop" then
-	headerBaseImage = "centerbase (doubleres).png"
-elseif screenName == "ScreenNetEvaluation" then
-	headerBaseImage = "centerbase (doubleres).png"
+elseif screenName == "ScreenSelectMusicRD" then
+	headerBaseImage = "RDbase (doubleres).png"
 elseif screenName == "ScreenSelectMusicExtra" then
 	headerBaseImage = "extrabase (doubleres).png"
 else
-	headerBaseImage = "regular"
+	headerBaseImage = "regular/default.lua"
 end
 
 local function UpdateAni(self)
@@ -79,23 +78,16 @@ local out = Def.ActorFrame{
 	LoadActor(headerBaseImage)..{
 		InitCommand=function(self)
 			if screenName == "ScreenSelectProfile" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
-			elseif screenName == "ScreenEvaluationNormal" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
-			elseif screenName == "ScreenEvaluationSummary" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
-			elseif screenName == "ScreenEvaluationOni" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
-			elseif screenName == "ScreenEvaluationNonstop" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
+				self:x(SCREEN_CENTER_X):halign(0.5)
+			elseif string.find(screenName, "ScreenEvaluation")
+  				or screenName == "ScreenNetEvaluation" then
+				self:x(SCREEN_CENTER_X):halign(0.5)
 			elseif screenName == "ScreenDataSaveSummary" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
-			elseif screenName == "ScreenNetEvaluation" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
-      elseif screenName == "ScreenSelectMusicExtra" then
-				self:x(SCREEN_CENTER_X):halign(0.5):y(10);
+				self:x(SCREEN_CENTER_X):halign(0.5)
+      		elseif screenName == "ScreenSelectMusicExtra" then
+				self:x(SCREEN_CENTER_X):halign(0.5)
 			else
-				self:x(SCREEN_LEFT):halign(0);
+				self:x(SCREEN_LEFT-1.2):halign(0);
 			end;
 		end;
 	};
@@ -118,29 +110,24 @@ end
 if headerTextImage then
 	table.insert(out,LoadActor(headerTextImage)..{
 		InitCommand=function(self)
-			self:y(5):valign(1);
+			self:y(8):valign(1);
 			if screenName == "ScreenSelectProfile" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
-			elseif screenName == "ScreenEvaluationNormal" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
-			elseif screenName == "ScreenEvaluationSummary" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
-			elseif screenName == "ScreenEvaluationOni" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
-			elseif screenName == "ScreenEvaluationNonstop" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
-			elseif screenName == "ScreenNetEvaluation" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
+				self:x(SCREEN_CENTER_X):halign(0.5):y(10)
+			elseif string.find(screenName, "ScreenEvaluation")
+  				or screenName == "ScreenNetEvaluation" then
+				self:x(SCREEN_CENTER_X):halign(0.5):y(10)
 			elseif screenName == "ScreenDataSaveSummary" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
+				self:x(SCREEN_CENTER_X):halign(0.5):y(10)
       elseif screenName == "ScreenSelectMusicExtra" then
-				self:x(SCREEN_CENTER_X):halign(0.5);
+				self:x(SCREEN_CENTER_X):halign(0.5):y(10)
       elseif screenName == "ScreenSelectMusicStarter" then
-				self:x(SCREEN_LEFT+95):y(20):halign(0);
+				self:x(SCREEN_LEFT+123):y(8)
       elseif screenName == "ScreenSelectMusic" then
-				self:x(SCREEN_LEFT+95):y(20):halign(0);
+				self:x(SCREEN_LEFT+123):y(8);
+      elseif screenName == "ScreenSelectMusicRD" then
+				self:x(SCREEN_CENTER_X):y(3)
 			else
-				self:x(SCREEN_LEFT+95):halign(0);
+				self:x(SCREEN_LEFT+123):y(8);
 			end;
 		end;
 	})

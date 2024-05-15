@@ -29,6 +29,7 @@ t[#t+1] = Def.ActorFrame {
 		LoadActor(THEME:GetPathB("","_shared/right explosion"))..{
 			OnCommand=cmd(diffusealpha,0;sleep,3;accelerate,0.2;diffusealpha,1;sleep,0.5;linear,1;diffusealpha,0;sleep,3;queuecommand,'On');
 		};
+		Condition=not ThemePrefs.Get("LightMode");
 	};
 	Def.ActorFrame{
 		LoadActor("ddrsn_logo")..{

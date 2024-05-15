@@ -14,8 +14,11 @@
 	};
 };]]
 
-local t = LoadActor(THEME:GetPathB("","_doors"), "door", 1.3, true )
+local t = LoadActor(THEME:GetPathB("","_doors"), "_newer door", 1.5, true )
 t[#t+1] = LoadActor(("../cheer"))..{
+	StartTransitioningCommand=cmd(play);
+};
+t[#t+1] = LoadActor(("../../cleared"))..{
 	StartTransitioningCommand=cmd(play);
 };
 
@@ -38,15 +41,11 @@ if not (GAMESTATE:Env()).EndlessState then
 			end;
 		OnCommand=function(self)
 			self:queuecommand("Set")
-			if GAMESTATE:GetEarnedExtraStage() == 'EarnedExtraStage_No' then
-				self:diffusealpha(0):sleep(0.5):
-				zoomy(0):zoomx(4):linear(0.198):
-				diffusealpha(1):zoomy(1):zoomx(1):
-				sleep(4.7):linear(0.132):
-				zoomy(0):zoomx(4):diffusealpha(0)
-			else
-				self:diffusealpha(0)
-			end;
+			self:diffusealpha(0):sleep(0.5):
+			zoomy(0):zoomx(4):linear(0.198):
+			diffusealpha(1):zoomy(1):zoomx(1):
+			sleep(4.7):linear(0.132):
+			zoomy(0):zoomx(4):diffusealpha(0)
 		end;
 		};
 	};

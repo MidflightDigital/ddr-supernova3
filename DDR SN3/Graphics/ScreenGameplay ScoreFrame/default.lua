@@ -55,10 +55,10 @@ if GAMESTATE:IsPlayerEnabled('PlayerNumber_P1') then
 t[#t+1]=Def.ActorFrame{
 	InitCommand=cmd(addy,2);
 	Def.Quad{
-		InitCommand=cmd(halign,0;x,SCREEN_LEFT;setsize,192,24;diffuse,color("#666666"));
+		InitCommand=cmd(halign,0;x,SCREEN_LEFT;setsize,WideScale(192,256),24;diffuse,color("#666666"));
 	};
 	Def.Quad{
-		InitCommand=cmd(halign,0;x,SCREEN_LEFT;setsize,190,20;diffuse,color("0,0,0,1"));
+		InitCommand=cmd(halign,0;x,SCREEN_LEFT;setsize,WideScale(190,254),20;diffuse,color("0,0,0,1"));
 	};
 };
 	if endless then
@@ -84,10 +84,10 @@ if GAMESTATE:IsPlayerEnabled('PlayerNumber_P2') then
 t[#t+1]=Def.ActorFrame{
 	InitCommand=cmd(addy,2);
 	Def.Quad{
-		InitCommand=cmd(halign,1;x,SCREEN_RIGHT;setsize,192,24;diffuse,color("#666666"));
+		InitCommand=cmd(halign,1;x,SCREEN_RIGHT;setsize,WideScale(192,256),24;diffuse,color("#666666"));
 	};
 	Def.Quad{
-		InitCommand=cmd(halign,1;x,SCREEN_RIGHT;setsize,190,20;diffuse,color("0,0,0,1"));
+		InitCommand=cmd(halign,1;x,SCREEN_RIGHT;setsize,WideScale(190,254),20;diffuse,color("0,0,0,1"));
 	};
 };
 	if endless then
